@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-privacypass-rate-limit-tokens.md scott@shendrickson.com jri@fastly.com tpauly@apple.com svaldez@chromium.org caw@heapingbits.net
