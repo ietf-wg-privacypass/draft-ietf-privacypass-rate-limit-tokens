@@ -1,0 +1,87 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-09-04T02:11:05.492809+00:00",
+  "repo": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOH668Ec5RAbDd",
+      "title": "Should the token key ID be only one bit?",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/1",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From https://github.com/tfpauly/privacy-proxy/issues/222\r\n\r\n> With https://github.com/tfpauly/privacy-proxy/pull/220, we have a 8-bit key ID that the issuer (but not attester) sees. We can consider moving this to be one bit only, to allow rotation while not having to worry about key targeting/consistency checks.",
+      "createdAt": "2022-09-01T15:50:33Z",
+      "updatedAt": "2022-09-01T15:50:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOH668Ec5RAbTf",
+      "title": "Rate-Limited Tokens: Preventing attester from learning rate limit",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/2",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From https://github.com/tfpauly/privacy-proxy/issues/219\r\n\r\n> In the current proposal, the attester learns the rate limit specific to the origin. This reduces the anonymity set to origins that share a common rate. Below, I describe an idea that prevents the attester from learning this rate.\r\n> \r\n> Simplified summary of current proposal:\r\n> \r\n> (as I understand it so far; for sake of comparison)\r\n> \r\n> client sends BlindSigReq to attester\r\n> attester forwards BlindSigReq to issuer\r\n> issuer responds with BlindSigResponse and the origin's RateLimit\r\n> attester enforces RateLimit based on H(client,origin) pair\r\n> if rate limit OK, attester forwards BlindSigResponse to client\r\n> client unpacks to learn its desired blind signature token\r\n> Main idea\r\n> \r\n> The main idea is to let the client request its entire quota of tokens in a single interaction, instead of requesting them one at a time. For this, I must make a distinction between an interaction and a token.\r\n> \r\n> Let's say that all rate limits are expressed in the units of tokens / hour. Then the attester will simply check that there is at most 1 interaction, per (client,origin) pair, per hour. The attester's check is the same for all origins (1 interaction per hour), regardless of their true rate limit. But each \"interaction\" results in the client learning many tokens. The issuer already knows the rate limit (expressed in tokens per hour) so it enforces the rate limit by only giving out the correct # of tokens in a single interaction.\r\n> \r\n> Simplified summary of new proposal:\r\n> \r\n> For the sake of simplicity, I will assume that both client and issuer know the origin's desired rate limit.\r\n> I will extend the notation so that BlindSigReq(n) <--> BlindSigResponse(n) is a blind signature protocol where the client learns n distinct signatures.\r\n> \r\n> client sends BlindSigReq(RateLimit) to attester, where RateLimit is the origin's limit\r\n> attester forwards BlindSigReq(RateLimit) to issuer\r\n> issuer responds with BlindSigResponse(RateLimit)\r\n> attester checks: was there a prior request on this (client,origin) pair in the last hour?\r\n> if no such prior request, then attester forwards BlindSigResponse(RateLimit) to client\r\n> client unpacks to learn RateLimit number of blind signature token\r\n> In order to hide the rate limit from the attester, the BlindSig{Req,Response} protocol messages must hide the rate limit. I'm not sure if there are blind signatures or [V]OPRFs where the client can get several distinct tokens, in a protocol messages of constant size. However, I have some hope because the client mostly cares about the number of tokens learned, and is less concerned about what message is being signed. I.e., the client could learn signatures on a collection of random messages.\r\n> \r\n> If such a blind signature or OPRF is not possible/feasible, then a trivial way to hide the rate limit is to pad the size of the protocol message to some maximum limit. One could also consider leaking only partial information about the rate limit -- e.g., round the rate limit up to the nearest power of two and pad the protocol messages to that size. A downside to this simple padding strategy is that it is wasteful of bandwidth by design.",
+      "createdAt": "2022-09-01T15:51:20Z",
+      "updatedAt": "2022-09-01T15:51:20Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": []
+}
