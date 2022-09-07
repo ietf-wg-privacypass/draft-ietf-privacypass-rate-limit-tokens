@@ -5,14 +5,14 @@
 Network Working Group                                     S. Hendrickson
 Internet-Draft                                                Google LLC
 Intended status: Informational                                J. Iyengar
-Expires: 5 March 2023                                             Fastly
+Expires: 11 March 2023                                            Fastly
                                                                 T. Pauly
                                                               Apple Inc.
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                        1 September 2022
+                                                        7 September 2022
 
 
                   Rate-Limited Token Issuance Protocol
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 March 2023.
+   This Internet-Draft will expire on 11 March 2023.
 
 Copyright Notice
 
@@ -1902,12 +1902,7 @@ index_key = BKS-SerializePublicKey(evaluated_key)
               draft-ietf-privacypass-protocol-06>.
 
    [KEYAGREEMENT]
-              Barker, E., Chen, L., Roginsky, A., Vassilev, A., and R.
-              Davis, "Recommendation for pair-wise key-establishment
-              schemes using discrete logarithm cryptography", National
-              Institute of Standards and Technology report,
-              DOI 10.6028/nist.sp.800-56ar3, April 2018,
-              <https://doi.org/10.6028/nist.sp.800-56ar3>.
+              "*** BROKEN REFERENCE ***".
 
    [KEYBLINDING]
               Denis, F., Eaton, E., Lepoint, T., and C. A. Wood, "Key
