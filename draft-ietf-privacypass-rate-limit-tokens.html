@@ -1046,7 +1046,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Hendrickson, et al.</td>
-<td class="center">Expires 11 March 2023</td>
+<td class="center">Expires 30 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1059,12 +1059,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-privacypass-rate-limit-tokens-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-09-07" class="published">7 September 2022</time>
+<time datetime="2022-09-26" class="published">26 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-03-11">11 March 2023</time></dd>
+<dd class="expires"><time datetime="2023-03-30">30 March 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1128,7 +1128,7 @@ from anonymous clients.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 30 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2001,24 +2001,15 @@ Its ABNF is:<a href="#section-5.2-6" class="pilcrow">¶</a></p>
     Sec-Token-Request-Blind = sf-binary
 </pre><a href="#section-5.2-7" class="pilcrow">¶</a>
 </div>
-<p id="section-5.2-8">The "Sec-Token-Request-Key" is an Item Structured Header <span>[<a href="#RFC8941" class="xref">RFC8941</a>]</span>. Its
-value MUST be a Byte Sequence. This header is sent on Client-to-Attester
-requests (<a href="#request-one" class="xref">Section 5.3</a>), and contains a per-request public key.
-Its ABNF is:<a href="#section-5.2-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.2-9">
-<pre>
-    Sec-Token-Request-Key = sf-binary
-</pre><a href="#section-5.2-9" class="pilcrow">¶</a>
-</div>
-<p id="section-5.2-10">The "Sec-Token-Limit" is an Item Structured Header <span>[<a href="#RFC8941" class="xref">RFC8941</a>]</span>. Its
+<p id="section-5.2-8">The "Sec-Token-Limit" is an Item Structured Header <span>[<a href="#RFC8941" class="xref">RFC8941</a>]</span>. Its
 value MUST be an Integer. This header is sent on Issuer-to-Attester
 responses (<a href="#response-one" class="xref">Section 5.5</a>), and contains the number of times a
 Client can retrieve a token for the requested Origin within a policy window,
-as set by the Issuer. Its ABNF is:<a href="#section-5.2-10" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.2-11">
+as set by the Issuer. Its ABNF is:<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.2-9">
 <pre>
     Sec-Token-Limit = sf-integer
-</pre><a href="#section-5.2-11" class="pilcrow">¶</a>
+</pre><a href="#section-5.2-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -3130,7 +3121,7 @@ in the "Permanent Message Header Field Names" &lt;<span><a href="https://www.ian
 <dl class="references">
 <dt id="ARCH">[ARCH]</dt>
         <dd>
-<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Architectural Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-architecture-06</span>, <time datetime="2022-08-05" class="refDate">5 August 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-06">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"The Privacy Pass Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-architecture-07</span>, <time datetime="2022-09-20" class="refDate">20 September 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-07">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="AUTHSCHEME">[AUTHSCHEME]</dt>
         <dd>
@@ -3150,11 +3141,11 @@ in the "Permanent Message Header Field Names" &lt;<span><a href="https://www.ian
 <dd class="break"></dd>
 <dt id="ISSUANCE">[ISSUANCE]</dt>
         <dd>
-<span class="refAuthor">Celi, S.</span>, <span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Issuance Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-protocol-06</span>, <time datetime="2022-07-06" class="refDate">6 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-protocol-06">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-protocol-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Celi, S.</span>, <span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Faz-Hernández, A.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Issuance Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-protocol-06</span>, <time datetime="2022-07-06" class="refDate">6 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-protocol-06">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-protocol-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="KEYAGREEMENT">[KEYAGREEMENT]</dt>
         <dd>
-<span class="refTitle">"*** BROKEN REFERENCE ***"</span>. </dd>
+<span class="refAuthor">Barker, E.</span>, <span class="refAuthor">Chen, L.</span>, <span class="refAuthor">Roginsky, A.</span>, <span class="refAuthor">Vassilev, A.</span>, and <span class="refAuthor">R. Davis</span>, <span class="refTitle">"Recommendation for pair-wise key-establishment schemes using discrete logarithm cryptography"</span>, <span class="seriesInfo">National Institute of Standards and Technology report</span>, <span class="seriesInfo">DOI 10.6028/nist.sp.800-56ar3</span>, <time datetime="2018-04" class="refDate">April 2018</time>, <span>&lt;<a href="https://doi.org/10.6028/nist.sp.800-56ar3">https://doi.org/10.6028/nist.sp.800-56ar3</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="KEYBLINDING">[KEYBLINDING]</dt>
         <dd>

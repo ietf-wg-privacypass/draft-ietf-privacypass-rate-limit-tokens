@@ -5,14 +5,14 @@
 Network Working Group                                     S. Hendrickson
 Internet-Draft                                                Google LLC
 Intended status: Informational                                J. Iyengar
-Expires: 11 March 2023                                            Fastly
+Expires: 30 March 2023                                            Fastly
                                                                 T. Pauly
                                                               Apple Inc.
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                        7 September 2022
+                                                       26 September 2022
 
 
                   Rate-Limited Token Issuance Protocol
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 March 2023.
+   This Internet-Draft will expire on 30 March 2023.
 
 Copyright Notice
 
@@ -784,13 +784,6 @@ Table of Contents
    value.  Its ABNF is:
 
        Sec-Token-Request-Blind = sf-binary
-
-   The "Sec-Token-Request-Key" is an Item Structured Header [RFC8941].
-   Its value MUST be a Byte Sequence.  This header is sent on Client-to-
-   Attester requests (Section 5.3), and contains a per-request public
-   key.  Its ABNF is:
-
-       Sec-Token-Request-Key = sf-binary
 
    The "Sec-Token-Limit" is an Item Structured Header [RFC8941].  Its
    value MUST be an Integer.  This header is sent on Issuer-to-Attester
@@ -1867,11 +1860,11 @@ index_key = BKS-SerializePublicKey(evaluated_key)
 
 12.1.  Normative References
 
-   [ARCH]     Davidson, A., Iyengar, J., and C. A. Wood, "Privacy Pass
-              Architectural Framework", Work in Progress, Internet-
-              Draft, draft-ietf-privacypass-architecture-06, 5 August
-              2022, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-architecture-06>.
+   [ARCH]     Davidson, A., Iyengar, J., and C. A. Wood, "The Privacy
+              Pass Architecture", Work in Progress, Internet-Draft,
+              draft-ietf-privacypass-architecture-07, 20 September 2022,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-
+              privacypass-architecture-07>.
 
    [AUTHSCHEME]
               Pauly, T., Valdez, S., and C. A. Wood, "The Privacy Pass
@@ -1895,14 +1888,19 @@ index_key = BKS-SerializePublicKey(evaluated_key)
               Public Key Encryption", RFC 9180, DOI 10.17487/RFC9180,
               February 2022, <https://www.rfc-editor.org/rfc/rfc9180>.
 
-   [ISSUANCE] Celi, S., Davidson, A., Faz-Hernandez, A., Valdez, S., and
+   [ISSUANCE] Celi, S., Davidson, A., Faz-Hernández, A., Valdez, S., and
               C. A. Wood, "Privacy Pass Issuance Protocol", Work in
               Progress, Internet-Draft, draft-ietf-privacypass-protocol-
               06, 6 July 2022, <https://datatracker.ietf.org/doc/html/
               draft-ietf-privacypass-protocol-06>.
 
    [KEYAGREEMENT]
-              "*** BROKEN REFERENCE ***".
+              Barker, E., Chen, L., Roginsky, A., Vassilev, A., and R.
+              Davis, "Recommendation for pair-wise key-establishment
+              schemes using discrete logarithm cryptography", National
+              Institute of Standards and Technology report,
+              DOI 10.6028/nist.sp.800-56ar3, April 2018,
+              <https://doi.org/10.6028/nist.sp.800-56ar3>.
 
    [KEYBLINDING]
               Denis, F., Eaton, E., Lepoint, T., and C. A. Wood, "Key
