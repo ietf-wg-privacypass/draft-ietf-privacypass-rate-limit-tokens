@@ -644,15 +644,6 @@ Its ABNF is:
     Sec-Token-Request-Blind = sf-binary
 ~~~
 
-The "Sec-Token-Request-Key" is an Item Structured Header {{!RFC8941}}. Its
-value MUST be a Byte Sequence. This header is sent on Client-to-Attester
-requests ({{request-one}}), and contains a per-request public key.
-Its ABNF is:
-
-~~~
-    Sec-Token-Request-Key = sf-binary
-~~~
-
 The "Sec-Token-Limit" is an Item Structured Header {{!RFC8941}}. Its
 value MUST be an Integer. This header is sent on Issuer-to-Attester
 responses ({{response-one}}), and contains the number of times a
