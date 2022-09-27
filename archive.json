@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-08T02:21:45.346889+00:00",
+  "timestamp": "2022-09-27T02:16:49.010768+00:00",
   "repo": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
   "labels": [
     {
@@ -81,6 +81,22 @@
       "updatedAt": "2022-09-01T15:51:20Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOH668Ec5SpZAp",
+      "title": "Allow rate-limited origin to be someone other than the challenger",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/5",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "If a first party origin allows a third party origin to issue challenges on its behalf, and the origin_info includes both the first and third party names, we should allow the origin used for rate-limiting to be the first party.",
+      "createdAt": "2022-09-26T19:15:42Z",
+      "updatedAt": "2022-09-26T19:15:42Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -111,6 +127,56 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOH668Ec4_oEUa",
+      "title": "Remove dangling Sec-Token-Request-Key text",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/pull/4",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-26T17:16:02Z",
+      "updatedAt": "2022-09-26T17:22:25Z",
+      "baseRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "baseRefName": "main",
+      "baseRefOid": "29e21877fc4a98e7e493f93b7a3d167c80f8a35e",
+      "headRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "2151269dd72ab6c36de6b257864683465a82c218",
+      "closedAt": "2022-09-26T17:22:25Z",
+      "mergedAt": "2022-09-26T17:22:25Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "5d5f528996185c789d26db8c8e09c9cca874d62a"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "\ud83e\udd26 ",
+          "createdAt": "2022-09-26T17:22:21Z",
+          "updatedAt": "2022-09-26T17:22:21Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH668Ec5Cy5fk",
+          "commit": {
+            "abbreviatedOid": "2151269"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-09-26T17:22:14Z",
+          "updatedAt": "2022-09-26T17:22:14Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
