@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-27T02:16:49.010768+00:00",
+  "timestamp": "2022-10-18T02:25:37.227617+00:00",
   "repo": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
   "labels": [
     {
@@ -97,6 +97,37 @@
       "updatedAt": "2022-09-26T19:15:42Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOH668Ec5UKATh",
+      "title": "Malicious Issuer with a colluding Origin breaks unlinkability",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/6",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "*TL;DR*: An attacker can re-use the same OPRF key (Issuer Origin Secret, denoted `sk_origin` in pseudocode) for each origin to track clients across origins.\r\n\r\n# Simplified example\r\n\r\nImagine there are two users, X and Y, each with public key g^x and g^y, respectively. and two origins, O1 and O2. Imagine further that the attacker controlling O1 and O2 colludes with the Issuer and wants to track when a user visits both O1 and O2. Finally, imagine the rate limit to each origin is 1. \r\n\r\nUnlinkability asserts that an attacker cannot distinguish between the following scenarios:\r\n\r\n1. X visiting O1 and then Y visiting O2\r\n2. X visiting O1 and then X visiting O2\r\n\r\nRecall that the anonymous issuer origin ID is computed roughly as Hash(g^x, g^xk), where g^x is a client public key and g^xk is the result of the client's public key evaluated by the issuer OPRF key.\r\n\r\nIf a malicious issuer uses the same OPRF key k across O1 and O2, then the these two scenarios end up computing the following:\r\n\r\n1. Hash(g^x, g^xk), Hash(g^y, g^yk)\r\n2. Hash(g^x, g^xk), Hash(g^x, g^xk)\r\n\r\nIf the rate limit is 1, then X's second visit in (2) will fail, which is the distinguishing event.\r\n\r\n# Root of the problem\r\n\r\nThe root of the problem is that the Issuer's input to the OPRF is unverified. Addressing this either requires we relax the threat model and assume the Issuer is honest-but-curious, which seems like a subpar outcome, or try to fix the protocol. Unfortunately, with the current design, fixing this issue is challenging since any sort of \"public verifiability\" might open up dictionary attacks by the Attester, which the protocol aims to prevent. \r\n\r\nThere are likely a couple ways this could be addressed, each with different complexity:\r\n\r\n1. Make the Client \"stateful,\" so it can check whether or not the same anonymous issuer origin ID is computed across origins, and fail if this ever occurs. This may be problematic in practice due to the number of distinct origins and keys the client needs to remember.\r\n2. Move the anonymous issuer origin ID computation to the client without any involvement from either Attester or Issuer, using a combination of standard zero-knowledge proofs. This has the benefit of simplifying both Attester and Issuer, and also allowing the Attester to enforce rate limits _before_ querying the Issuer.\r\n\r\nWe're currently investigating (2) and will report back when we have a better handle on the resulting security analysis and implementation status.",
+      "createdAt": "2022-10-17T17:00:03Z",
+      "updatedAt": "2022-10-17T19:00:36Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "For clarity, the OPRF in this case refers to the \"Issuer Origin Secret\" in the document.\r\n\r\nIn general, the Attester can enforce what rate limits it allows Issuers to have, since it is the one actually applying various limits. We've discussed having attesters disallow limits of 1 for various reasons. Of course, this same pattern could exist at higher limits, but it becomes more speculative.\r\n\r\nI'm also curious how this interacts with the Attester's checks, specifically:\r\n\r\n> If the \"Sec-Token-Origin\" is missing, or if the same Anonymous Issuer Origin ID was previously received in a response for a different Anonymous Origin ID within the same policy window, the Attester MUST drop the token and respond to the client with an HTTP 400 status.\r\n\r\nThe point of that check is to detect a collision between two different origins, where the client says there are two origins, but the issuer says there is only one. Without the details of the attack here, how can the issuer cause a rate limit to be incorrectly applied by the attester without falling afoul of this check?",
+          "createdAt": "2022-10-17T17:45:03Z",
+          "updatedAt": "2022-10-17T17:45:03Z"
+        },
+        {
+          "author": "dvorak42",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Even with moderate rate limits I think this is still a pretty substantial problem, you'd need something like minimum rate limits of 10+ to mitigate the basic version of this attack (and it seems colluding origin can just always redeem N/2+1 tokens at a time against a total rate limit of N to devolve the issue to the same as the rate limit of 1 case?).\r\n\r\nThe stateful version might be okay as a stopgap or for certain ecosystems, but I'm not sure it is particularly feasible at web/browser-scale and there's also potential edge cases where if the client fails to complete the privacypass redemption on an origin, it can learn with some probability that the client likely saw a previous origin with the same anon issuer origin ID and learn approximately the same information.\r\n\r\nI'm curious about the new design for the client-provided ID, seems like you still need some origin/issuer input to bind the client's anon origin ID to prevent it from pretending the same origin has many different identities, but maybe there's something clever with some known component of the origin and ZKPs you can do?",
+          "createdAt": "2022-10-17T19:00:36Z",
+          "updatedAt": "2022-10-17T19:00:36Z"
+        }
+      ]
     }
   ],
   "pulls": [
