@@ -232,22 +232,25 @@ error instead of the issuer's token response.
 ~~~
 {: #fig-example-deny title="Failed rate-limited issuance"}
 
-Each Issuer has a window over which a rate limit policy is applied. The window
-begins upon a Client's first token request and ends after the window time elapses,
-after which the Client's rate limit state is reset. Issuers apply the rate limit
-policy corresponding to a Client's encrypted Origin by using a per-Origin secret
-key to produce the token response. Attesters enforce the rate limit by combining
-the Issuer's response with a per-Client value, yielding an (Anonymous) Issuer
-Origin ID that is stable for all client requests to the designated Origin.
-The Anonymous Issuer Origin ID is used to track and enforce the Client rate limit.
+Each Issuer defines a window of time over which Attesters enforce rate limits.
+The window begins upon a Client's first token request to the Attester for that
+Issuer and ends after the window time elapses, after which the Client's rate limit
+state is reset. Issuers indicate which rate limit to use for a given request by
+parsing the Client's encrypted Origin. Attesters enforce the rate limit based
+on the value indicated by the Issuer, and maintaining the count of accesses
+by a client to a corresponding Anonymous Origin ID.
 
-Issuers can rotate the secret they use when applying rate limits as desired. If
-a rotation event happens during a Client's active policy window, the Attester would
-compute a different Anonymous Issuer Origin ID and mistakenly conclude that the
-Client is acccessing a new Origin. To mitigate this, Client's provide a stable
-Anonymous Origin ID in their request to the Attester, which is constant for all
-requests to that Origin. This allows the Attester to detect when Issuer rotation
-events occur without affecting Client rate limits.
+Along with the rate limit for the Origin, Issuers include a value generated
+with a per-Origin secret in their responses, which allows Attesters to ensure
+that the Anonymous Origin ID indicated by the Client maps to exactly one Origin
+as seen by the Issuer; this value that is used to validate the Anonymous Origin ID
+is called the Anonymous Issuer Origin ID. Issuers can rotate the per-Origin secret
+they use as desired. If a rotation event happens during a Client's active policy
+window, the Attester would compute a different Anonymous Issuer Origin ID and
+mistakenly conclude that the Client is accessing a new Origin. To mitigate this,
+Clients provide a stable Anonymous Origin ID in their request to the Attester,
+which is constant for all requests to that Origin. This allows the Attester to
+detect when Issuer rotation events occur without affecting Client rate limits.
 
 ~~~
                           Per-Origin
