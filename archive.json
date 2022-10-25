@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-20T02:24:20.852422+00:00",
+  "timestamp": "2022-10-25T02:29:42.596871+00:00",
   "repo": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
   "labels": [
     {
@@ -101,7 +101,7 @@
     {
       "number": 6,
       "id": "I_kwDOH668Ec5UKATh",
-      "title": "Malicious Issuer with a colluding Origin breaks unlinkability for buggy Attesters",
+      "title": "Malicious Issuer with a colluding Origin breaks unlinkability Attesters",
       "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/6",
       "state": "OPEN",
       "author": "chris-wood",
@@ -110,7 +110,7 @@
       "labels": [],
       "body": "*TL;DR*: An attacker can re-use the same OPRF key (Issuer Origin Secret, denoted `sk_origin` in pseudocode) for each origin to track clients across origins if the attester doesn't implement a security-critical check.\r\n\r\n# Simplified example\r\n\r\nImagine there are two users, X and Y, each with public key g^x and g^y, respectively. and two origins, O1 and O2. Imagine further that the attacker controlling O1 and O2 colludes with the Issuer and wants to track when a user visits both O1 and O2. Finally, imagine the rate limit to each origin is 1. \r\n\r\nUnlinkability asserts that an attacker cannot distinguish between the following scenarios:\r\n\r\n1. X visiting O1 and then Y visiting O2\r\n2. X visiting O1 and then X visiting O2\r\n\r\nRecall that the anonymous issuer origin ID is computed roughly as Hash(g^x, g^xk), where g^x is a client public key and g^xk is the result of the client's public key evaluated by the issuer OPRF key.\r\n\r\nIf a malicious issuer uses the same OPRF key k across O1 and O2, then the these two scenarios end up computing the following:\r\n\r\n1. Hash(g^x, g^xk), Hash(g^y, g^yk)\r\n2. Hash(g^x, g^xk), Hash(g^x, g^xk)\r\n\r\nIf the rate limit is 1, then X's second visit in (2) will fail, which is the distinguishing event.\r\n\r\n# Root of the problem\r\n\r\nThe root of the problem is that the Issuer's input to the OPRF is unverified. Addressing this either requires we relax the threat model and assume the Issuer is honest-but-curious, which seems like a subpar outcome, or try to fix the protocol. Unfortunately, with the current design, fixing this issue is challenging since any sort of \"public verifiability\" might open up dictionary attacks by the Attester, which the protocol aims to prevent. \r\n\r\nThere are likely a couple ways this could be addressed, each with different complexity:\r\n\r\n1. Make the Client \"stateful,\" so it can check whether or not the same anonymous issuer origin ID is computed across origins, and fail if this ever occurs. This may be problematic in practice due to the number of distinct origins and keys the client needs to remember.\r\n2. Move the anonymous issuer origin ID computation to the client without any involvement from either Attester or Issuer, using a combination of standard zero-knowledge proofs. This has the benefit of simplifying both Attester and Issuer, and also allowing the Attester to enforce rate limits _before_ querying the Issuer.\r\n\r\nWe're currently investigating (2) and will report back when we have a better handle on the resulting security analysis and implementation status.",
       "createdAt": "2022-10-17T17:00:03Z",
-      "updatedAt": "2022-10-19T14:28:27Z",
+      "updatedAt": "2022-10-24T13:27:06Z",
       "closedAt": null,
       "comments": [
         {
@@ -226,6 +226,22 @@
           "updatedAt": "2022-10-19T14:28:27Z"
         }
       ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOH668Ec5UuDAO",
+      "title": "Make attester anomaly detection and reaction more clear",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/8",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "One way to fix #6 is to not immediately fail requests when a bucket collides, but instead treat it more like the other types of anomaly detection performed on the attester.\r\n\r\nAnomaly detection on the attester:\r\n- If you change you client secret too much, you're out\r\n- If you have too many collisions for a client, you're out\r\n- If you have too many collisions for an issuer, it is out",
+      "createdAt": "2022-10-24T19:57:20Z",
+      "updatedAt": "2022-10-24T19:57:20Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
