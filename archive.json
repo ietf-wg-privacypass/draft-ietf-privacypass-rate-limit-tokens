@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-25T02:29:42.596871+00:00",
+  "timestamp": "2022-11-17T01:47:56.507707+00:00",
   "repo": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
   "labels": [
     {
@@ -242,6 +242,30 @@
       "updatedAt": "2022-10-24T19:57:20Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOH668Ec5WbtWB",
+      "title": "text about rate-limits being enforced by a single attester / issuer pair",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/9",
+      "state": "OPEN",
+      "author": "nikitaborisov",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The PP arch document discusses the possibilities of an issuer potentially working with more than one attester. Likewise, an origin can work with multiple issuers. I think there should be some text that clarifies that in such cases, the rate limits enforced by a different attester and/or issuer would not apply to the user. Or, to put it a different way, the entity that is being rate-limited is _defined_ by the attester working together with an issuer. ",
+      "createdAt": "2022-11-15T17:03:10Z",
+      "updatedAt": "2022-11-15T17:35:42Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Correct, that's a good point. The Issuer chosen by the Origin must be selected in such a way that it will not allow working with Attesters that allow too much overlap \u2014 i.e., if you work with attesters based on hardware, it's fine, but don't mix email account and hardware attesters since you could have many of those.",
+          "createdAt": "2022-11-15T17:35:41Z",
+          "updatedAt": "2022-11-15T17:35:41Z"
+        }
+      ]
     }
   ],
   "pulls": [
