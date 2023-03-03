@@ -475,10 +475,17 @@ Clients receive challenges for tokens, as described in {{AUTHSCHEME}}.
 For the rate-limited token issuance protocol described in this document,
 the name of the origin is sent in an encrypted message from the Client
 to the Issuer. If the TokenChallenge.origin_info field contains a single
-origin name, that origin name is used. If the origin_info field contains
-multiple origin names, the client selects the single origin name that
-presented the challenge. If the origin_info field is empty, the
-encrypted message is the empty string "".
+origin name, that origin name is used. If the origin_info field is empty, the
+encrypted message is the empty string "". If the origin_info field contains
+multiple origin names, the Client is permitted to select any of the origin
+names to use for the encrypted message. In general, the Client SHOULD
+select the origin name that presented the challenge. However, in the context
+of loading a webpage, the Client SHOULD prefer using the name of the
+main document URL (the first-party name, as opposed to a third-party name)
+if it is present in the origin_info list. Issuers need to ensure that they
+only allow rate-limiting on expected origins, which for the case of websites
+with challenges originating from third-parties would generally be the
+first-party name.
 
 The HTTP authentication challenge also SHOULD contain the following
 additional attribute:
