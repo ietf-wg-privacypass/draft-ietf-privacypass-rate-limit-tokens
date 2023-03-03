@@ -1611,7 +1611,7 @@ afbf2048890d54618d408a6001fc8fb276f6828c46f4fe1381e9775eec72ee47593df738
 ~~~
 
 
-## Anonymous Origin ID Test Vector
+## Anonymous Issuer Origin ID Test Vector
 
 The test vector below for the procedure in {{anon-issuer-origin-id}} lists the following values:
 
