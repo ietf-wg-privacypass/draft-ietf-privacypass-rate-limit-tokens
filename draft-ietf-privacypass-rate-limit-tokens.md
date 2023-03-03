@@ -968,18 +968,25 @@ below, with suggested thresholds. This list is not exhaustive.
 - Client Key changing more than once over any two consecutive policy windows
 for a single Client, based on the Attester's view of Client identity.
 This is a Client-specific penalization event. A RECOMMENDED threshold for
-penalizing the Client based on this is one event.
+penalizing the Client based on this is one event; a well-behaved
+Client will never change keys this frequently.
 
 - Issuer responses missing the "Sec-Token-Origin" header on a 2xx response.
 This is an Issuer-specific penalization event. A RECOMMENDED threshold for
-penalizing the Issuer based on this is ten events across all Clients.
+penalizing the Issuer based on this is ten events across all Clients; a
+well-behaved Issuer will never generate such responses, but it can be
+useful for an Attester to have a small tolerance for errors before penalizing
+an Issuer entirely.
 
 - Anonymous Issuer Origin ID (from Issuer) collision across two Anonymous
 Origin IDs for a particular Client within a single policy window. This
 penalization event is applicable for both Clients and Issuers. A RECOMMENDED
-threshold for penalizing the Issuer is ten events across all Clients.
+threshold for penalizing the Issuer is ten events across different Clients.
 A RECOMMENDED threshold for penalizing the Client is two events across multiple
-Issuers, or five events with a single Issuer.
+Issuers, or five events with a single Issuer. If many events are seen for a single
+Issuer, it is likely that the Issuer is compromised or malicious; while if such events
+are seen for a specific Client, it is likely that the Client is is compromised or
+malicious.
 
 Once a Client or Issuer passes the threshold for penalization, the Attester
 rejects future requests from that Client or for that Issuer. This SHOULD
