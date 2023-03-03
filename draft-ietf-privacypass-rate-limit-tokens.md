@@ -965,7 +965,8 @@ Each category of invalid events can have a different threshold, and can apply
 to Clients, Issuers, or both. Different penalization events are described
 below, with suggested thresholds. This list is not exhaustive.
 
-- Client Key changing more than once over any two consecutive policy windows.
+- Client Key changing more than once over any two consecutive policy windows
+for a single Client, based on the Attester's view of Client identity.
 This is a Client-specific penalization event. A RECOMMENDED threshold for
 penalizing the Client based on this is one event.
 
