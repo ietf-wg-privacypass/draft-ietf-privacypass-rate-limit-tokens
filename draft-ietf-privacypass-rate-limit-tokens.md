@@ -772,14 +772,11 @@ sec-token-request-blind = request_blind
 
 ### Attester behavior
 
-Upon receiving a request from a Client, the Attester first performs any required
-attestation checks of the Client, as well as checking if the Client has been
+Upon receiving a request from a Client, the Attester checks if the Client has been
 penalized based on incorrect behavior using this protocol (see {{penalization}}).
-If the Attester does not trust the Client, it rejects the request with an appropriate
-HTTP 4xx error.
+If the Client is not trusted, the Attester rejects the request with an appropriate HTTP 4xx error.
 
-The Attester determines the Issuer name from the "issuer" variable in the request.
-If this Issuer is not known to or trusted by the Attester, including if the Issuer
+If this Issuer for the token request is not known to or trusted by the Attester, including if the Issuer
 has been penalized (see {{penalization}}), the Attester rejects the request with
 an appropriate HTTP error.
 
@@ -917,7 +914,7 @@ The token response MUST continue to be processed, however, to prevent a maliciou
 Issuer from using a token issuance failure as a signal to the requesting Origin.
 
 If the Anonymous Issuer Origin ID derived from the value in the "Sec-Token-Origin" header
-was previously received in a response for a different Anonymous Origin ID within the
+was previously received in a response for a request with a different Anonymous Origin ID within the
 same policy window, the Attester MUST count this towards penalizing the Issuer or
 Client (see {{penalization}}). The token response MUST continue to be processed, however,
 to prevent a malicious Issuer from using a token issuance failure as a signal to the
@@ -969,18 +966,18 @@ to Clients, Issuers, or both. Different penalization events are described
 below, with suggested thresholds. This list is not exhaustive.
 
 - Client Key changing more than once over any two consecutive policy windows.
-This is a Client-specific penalization event. A suggested threshold for
+This is a Client-specific penalization event. A RECOMMENDED threshold for
 penalizing the Client based on this is one event.
 
 - Issuer responses missing the "Sec-Token-Origin" header on a 2xx response.
-This is an Issuer-specific penalization event. A suggested threshold for
+This is an Issuer-specific penalization event. A RECOMMENDED threshold for
 penalizing the Issuer based on this is ten events across all Clients.
 
 - Anonymous Issuer Origin ID (from Issuer) collision across two Anonymous
-Client IDs for a particular Client within a single policy window. This
-penalization event is applicable for both Clients and Issuers. A suggested
+Origin IDs for a particular Client within a single policy window. This
+penalization event is applicable for both Clients and Issuers. A RECOMMENDED
 threshold for penalizing the Issuer is ten events across all Clients.
-A suggested threshold for penalizing the Client is two events across multiple
+A RECOMMENDED threshold for penalizing the Client is two events across multiple
 Issuers, or five events with a single Issuer.
 
 Once a Client or Issuer passes the threshold for penalization, the Attester
