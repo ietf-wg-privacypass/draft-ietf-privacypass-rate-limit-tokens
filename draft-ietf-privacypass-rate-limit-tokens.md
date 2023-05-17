@@ -80,7 +80,7 @@ The base Privacy Pass issuance protocol {{!ISSUANCE=I-D.ietf-privacypass-protoco
 defines stateless anonymous tokens, which can either be publicly verifiable
 or not.
 
-This variant build upon the publicly verifiable issuance protocol that uses
+This variant builds upon the publicly verifiable issuance protocol that uses
 RSA Blind Signatures {{!BLINDSIG=I-D.irtf-cfrg-rsa-blind-signatures}}, and
 allows tokens to be rate-limited on a per-origin basis. This means that
 a client will only be able to receive a limited number of tokens associated
