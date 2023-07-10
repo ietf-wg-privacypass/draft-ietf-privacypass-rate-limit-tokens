@@ -630,13 +630,13 @@ the limit is useful.
 The Issuance protocol defines four new HTTP headers that are used in requests
 and responses between Clients, Attesters, and Issuers (see {{iana-headers}}).
 
-The "Sec-Token-Origin" is an Item Structured Header {{!RFC8941}}. Its
+The "Sec-Token-Origin-Alias" is an Item Structured Header {{!RFC8941}}. Its
 value MUST be a Byte Sequence. This header is sent both on Client-to-Attester
 requests ({{request-one}}) and on Issuer-to-Attester responses ({{response-one}}).
 Its ABNF is:
 
 ~~~
-    Sec-Token-Origin = sf-binary
+    Sec-Token-Origin-Alias = sf-binary
 ~~~
 
 The "Sec-Token-Client" is an Item Structured Header {{!RFC8941}}. Its
@@ -754,7 +754,7 @@ value, calculated as described in {{encrypt-origin}}.
 
 The Client then generates an HTTP POST request to send through the Attester to
 the Issuer, with the TokenRequest as the body. The media type for this request
-is "message/token-request". The Client includes the "Sec-Token-Origin" header,
+is "message/token-request". The Client includes the "Sec-Token-Origin-Alias" header,
 whose value is Client's Origin Alias; the "Sec-Token-Client" header, whose value is
 Client Key; and the "Sec-Token-Request-Blind" header, whose value is request_blind.
 The Client sends this request to the Attester's proxy URI. An example request is
@@ -770,7 +770,7 @@ accept = message/token-response
 cache-control = no-cache, no-store
 content-type = message/token-request
 content-length = <Length of TokenRequest>
-sec-token-origin = Client's Origin Alias
+sec-token-origin-alias = Client's Origin Alias
 sec-token-client = Client Key
 sec-token-request-blind = request_blind
 
@@ -890,7 +890,7 @@ yielding `encrypted_token_response`.
 
 The Issuer generates an HTTP response with status code 200 whose body consists of
 blind_sig, with the content type set as "message/token-response", the
-index_key set in the "Sec-Token-Origin" header, and the limit of tokens
+index_key set in the "Sec-Token-Origin-Alias" header, and the limit of tokens
 allowed for a Client for the Origin within a policy window set in the
 "Sec-Token-Limit" header. This limit SHOULD NOT be unique to a specific
 Origin, such that the Attester could use the value to infer which Origin
@@ -900,7 +900,7 @@ the Client is accessing (see {{privacy-considerations}}).
 :status = 200
 content-type = message/token-response
 content-length = <Length of blind_sig>
-sec-token-origin = index_key
+sec-token-origin-alias = index_key
 sec-token-limit = Token limit
 
 <Bytes containing the encrypted_token_response>
@@ -912,15 +912,15 @@ For all non-successful responses from the Issuer, the Attester forwards the HTTP
 response unmodified to the Client as the response to the original request for this issuance.
 
 Upon receipt of a successful (2xx) response from the Issuer, the Attester extracts the
-"Sec-Token-Origin" header, and uses the value to determine Issuer's Origin Alias
+"Sec-Token-Origin-Alias" header, and uses the value to determine Issuer's Origin Alias
 as described in {{attester-output-anon-issuer-origin-id}}.
 
-If the "Sec-Token-Origin" header is missing in a successful (2xx) response from the
+If the "Sec-Token-Origin-Alias" header is missing in a successful (2xx) response from the
 Issuer, the Attester MUST count this towards penalizing the Issuer (see {{penalization}}).
 The token response MUST continue to be processed, however, to prevent a malicious
 Issuer from using a token issuance failure as a signal to the requesting Origin.
 
-If the Issuer's Origin Alias derived from the value in the "Sec-Token-Origin" header
+If the Issuer's Origin Alias derived from the value in the "Sec-Token-Origin-Alias" header
 was previously received in a response for a request with a different Client's Origin Alias within the
 same policy window, the Attester MUST count this towards penalizing the Issuer or
 Client (see {{penalization}}). The token response MUST continue to be processed, however,
@@ -978,7 +978,7 @@ This is a Client-specific penalization event. A RECOMMENDED threshold for
 penalizing the Client based on this is one event; a well-behaved
 Client will never change keys this frequently.
 
-- Issuer responses missing the "Sec-Token-Origin" header on a 2xx response.
+- Issuer responses missing the "Sec-Token-Origin-Alias" header on a 2xx response.
 This is an Issuer-specific penalization event. A RECOMMENDED threshold for
 penalizing the Issuer based on this is ten events across all Clients; a
 well-behaved Issuer will never generate such responses, but it can be
@@ -1612,7 +1612,7 @@ in the "Permanent Message Header Field Names" <[](https://www.iana.org/assignmen
     +-------------------------+----------+--------+---------------+
     | Header Field Name       | Protocol | Status |   Reference   |
     +-------------------------+----------+--------+---------------+
-    | Sec-Token-Origin        |   http   |  std   | This document |
+    | Sec-Token-Origin-Alias  |   http   |  std   | This document |
     +-------------------------+----------+--------+---------------+
     | Sec-Token-Client        |   http   |  std   | This document |
     +-------------------------+----------+--------+---------------+
