@@ -488,7 +488,7 @@ to the first party name (the origin that hosts the main document URL).
 If a third-party is sending challenges in this way (that contain both the
 first- and third-party origin names), the Issuers need to ensure that they
 only allow rate-limiting on the expected origin (which SHOULD be the
-first-party name, to align with Client behavior). 
+first-party name, to align with Client behavior).
 
 The HTTP authentication challenge also SHOULD contain the following
 additional attribute:
