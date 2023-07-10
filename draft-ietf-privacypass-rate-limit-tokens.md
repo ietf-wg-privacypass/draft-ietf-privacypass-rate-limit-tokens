@@ -1330,7 +1330,7 @@ Key (denoted pk_sign), Attesters complete the Issuer's Origin Alias computation 
 1. Unblind the `index_key` using the Client blind `sk_blind`, yielding the index result.
 1. Run HKDF {{!RFC5869}} with the hash function corresponding to the BKS scheme,
    using the index result as the secret, Client Key `pk_sign` as the salt, and
-   ASCII string "issuer_origin_alias" as the info string, yielding Issuer's Origin Alias.
+   ASCII string "IssuerOriginAlias" as the info string, yielding Issuer's Origin Alias.
 
 In pseudocode, this is as follows:
 
@@ -1343,7 +1343,7 @@ index_result = BKS-SerializePublicKey(unblinded_key)
 pk_encoded = BKS-SerializePublicKey(pk_sign)
 
 issuer_origin_alias = HKDF-Hash(secret=index_result,
-  salt=pk_encoded, info="issuer_origin_alias")
+  salt=pk_encoded, info="IssuerOriginAlias")
 ~~~
 
 # Security Considerations {#sec-considerations}
@@ -1735,18 +1735,18 @@ The test vector below for the procedure in {{issuers-origin-alias}} lists the fo
 - issuer_origin_alias: The issuer_origin_alias value computed in {{attester-output-issuers-origin-alias}}, represented as a hexadecimal string.
 
 ~~~
-sk_sign: f6e6a0c9de38663ca539ff2e6a04e4fca11dc569794dc405e2d17439d6ce4f6
-7abb2b81a1852e0db993b6a0452eb60d6
-pk_sign: 032db7483c710673e6999a5fb2a2c6eac1d891f89bbf58d985ff168d182ad51
-605c4369280efabb7692f661162e683f03c
-sk_origin: 85de5fbbd787da5093da0adb240eba0cc6ea90d72032fc4b6925dd7d0ab1d
-a1e5ae0be27fe9f59e9ec7e1f1b15b28696
-request_blind: 0698a149fb9d16bcb0a856062f74f9191e82b35e91224a57abce60f5b
-79f03a669c6b5e093d57e647865f9fd4305b5a9
-request_key: 0287b0ce6b957111263d8c6126af96d400bd5a9d0b0f62ade15ab789446
-06c209470ced7086d3c418dd32bf9245fd42678
-index_key: 03188bec3dc02d2382b5251b6b4fd729d0472bbddf008c5e93b7c12270d9f
-57dde111c861c13be53822a1cebb604946066
-issuer_origin_alias: 9b0f980e5c1142fddb4401e5cd2107a87d22b73753b0d5dc9
-3f9a8f5ed2ee7db78163c6a93cc41ae8158d562381c51ee
+sk_sign: f7a8996bfd0d4ef9af88b3eab73d9e05a2d8c557407236aa15e67b4c
+8972bc57afb6562f0341dcc5e80fbb71811b9bbe
+pk_sign: 032d276595b188b428e954f0cf61bebea9663a7d6678042a54bdb177
+8fc88df7f03b83f7e2c15b14147f3487363f9dbd7a
+sk_origin: 337d87ad143b414e05e7f764df402b8af14c20c34dc727dca027aa
+87a5e1099f3760985813549a451ec42b0d7a377fdf
+request_blind: 7444e18d84cad471dc07d8210b714493254776ff897f040feb
+6e97a9a5f90f21d940ea7c50f8a5e3d9d8998c45ab7d42
+request_key: 02168f9ec10377781d0b16370e7e97b02755741ad0e66e089696
+080b4412ce56e933d47c22ff08a5d5da1474aa6b899b0a
+index_key: 0284e8d968c696e57194db7b7a37814a1d7c9c2216106530561d07
+adc87ff1b6b9c8b911711f5be66c165bbe90c280befb
+issuer_origin_alias: ee475b7c158ff52a89ae21e7178ce572124ba6012a58
+ba4124f0c691ffe4b40099637964891316264e8442f5f17aa5af
 ~~~
