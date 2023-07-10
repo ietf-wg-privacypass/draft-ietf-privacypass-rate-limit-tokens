@@ -754,7 +754,7 @@ value, calculated as described in {{encrypt-origin}}.
 
 The Client then generates an HTTP POST request to send through the Attester to
 the Issuer, with the TokenRequest as the body. The media type for this request
-is "message/token-request". The Client includes the "Sec-Token-Origin-Alias" header,
+is "application/private-token-request". The Client includes the "Sec-Token-Origin-Alias" header,
 whose value is Client's Origin Alias; the "Sec-Token-Client" header, whose value is
 Client Key; and the "Sec-Token-Request-Blind" header, whose value is request_blind.
 The Client sends this request to the Attester's proxy URI. An example request is
@@ -766,9 +766,9 @@ shown below, where the Issuer Name is "issuer.net" and the Attester URI template
 :scheme = https
 :authority = attester.net
 :path = /token-request?issuer=issuer.net
-accept = message/token-response
+accept = application/private-token-response
 cache-control = no-cache, no-store
-content-type = message/token-request
+content-type = application/private-token-request
 content-length = <Length of TokenRequest>
 sec-token-origin-alias = Client's Origin Alias
 sec-token-client = Client Key
@@ -836,9 +836,9 @@ or region to which a Client belongs. An example request is shown below.
 :scheme = https
 :authority = issuer.net
 :path = /token-request
-accept = message/token-response
+accept = application/private-token-response
 cache-control = no-cache, no-store
-content-type = message/token-request
+content-type = application/private-token-request
 content-length = <Length of TokenRequest>
 
 <Bytes containing the TokenRequest>
@@ -889,7 +889,7 @@ The Issuer then encrypts `blind_sig` to the Client as described in {{encap-issue
 yielding `encrypted_token_response`.
 
 The Issuer generates an HTTP response with status code 200 whose body consists of
-blind_sig, with the content type set as "message/token-response", the
+blind_sig, with the content type set as "application/private-token-response", the
 index_key set in the "Sec-Token-Origin-Alias" header, and the limit of tokens
 allowed for a Client for the Origin within a policy window set in the
 "Sec-Token-Limit" header. This limit SHOULD NOT be unique to a specific
@@ -898,7 +898,7 @@ the Client is accessing (see {{privacy-considerations}}).
 
 ~~~
 :status = 200
-content-type = message/token-response
+content-type = application/private-token-response
 content-length = <Length of blind_sig>
 sec-token-origin-alias = index_key
 sec-token-limit = Token limit
