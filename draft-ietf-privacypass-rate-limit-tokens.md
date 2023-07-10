@@ -702,7 +702,7 @@ blinded_msg, blind_inv = rsabssa_blind(pkI, token_input)
 ~~~
 
 The Client then uses Client Key to generate its one-time-use request public
-key `request_key` and blind `request_blind` as described in {{client-anon-issuer-origin-id}}.
+key `request_key` and blind `request_blind` as described in {{client-issuers-origin-alias}}.
 
 The Client then computes `token_key_id` as the least significant byte of the Token Key
 ID, where the Token Key ID is generated as SHA256(public_key) and public_key is a DER-encoded
@@ -754,7 +754,7 @@ value, calculated as described in {{encrypt-origin}}.
 
 The Client then generates an HTTP POST request to send through the Attester to
 the Issuer, with the TokenRequest as the body. The media type for this request
-is "application/private-token-request". The Client includes the "Sec-Token-Origin-Alias" header,
+is "message/token-request". The Client includes the "Sec-Token-Origin-Alias" header,
 whose value is Client's Origin Alias; the "Sec-Token-Client" header, whose value is
 Client Key; and the "Sec-Token-Request-Blind" header, whose value is request_blind.
 The Client sends this request to the Attester's proxy URI. An example request is
@@ -766,9 +766,9 @@ shown below, where the Issuer Name is "issuer.net" and the Attester URI template
 :scheme = https
 :authority = attester.net
 :path = /token-request?issuer=issuer.net
-accept = application/private-token-response
+accept = message/token-response
 cache-control = no-cache, no-store
-content-type = application/private-token-request
+content-type = message/token-request
 content-length = <Length of TokenRequest>
 sec-token-origin-alias = Client's Origin Alias
 sec-token-client = Client Key
@@ -799,7 +799,7 @@ the Client. If the key does not match, the Attester rejects the request with an 
 rotation; see {{privacy-considerations}} for considerations.
 
 The Attester finally validates the Client's stable mapping request as described in
-{{attester-anon-issuer-origin-id}}. If this fails, the Attester MUST return an HTTP 400
+{{attester-issuers-origin-alias}}. If this fails, the Attester MUST return an HTTP 400
 error to the Client.
 
 If the Attester accepts the request, it will look up the state stored for this Client.
@@ -836,9 +836,9 @@ or region to which a Client belongs. An example request is shown below.
 :scheme = https
 :authority = issuer.net
 :path = /token-request
-accept = application/private-token-response
+accept = message/token-response
 cache-control = no-cache, no-store
-content-type = application/private-token-request
+content-type = message/token-request
 content-length = <Length of TokenRequest>
 
 <Bytes containing the TokenRequest>
@@ -874,7 +874,7 @@ If the Issuer is willing to give a token to the Client, the Issuer decrypts
 TokenRequest.encrypted_token_request to discover a InnerTokenRequest value. If this fails,
 the Issuer rejects the request with a 400 error. Otherwise, the Issuer validates and
 processes the token request with Issuer Origin Secret corresponding to the designated
-Origin as described in {{issuer-anon-issuer-origin-id}}. If this fails, the Issuer
+Origin as described in {{issuer-issuers-origin-alias}}. If this fails, the Issuer
 rejects the request with a 400 error. Otherwise, the output is
 index_key.
 
@@ -889,7 +889,7 @@ The Issuer then encrypts `blind_sig` to the Client as described in {{encap-issue
 yielding `encrypted_token_response`.
 
 The Issuer generates an HTTP response with status code 200 whose body consists of
-blind_sig, with the content type set as "application/private-token-response", the
+blind_sig, with the content type set as "message/token-response", the
 index_key set in the "Sec-Token-Origin-Alias" header, and the limit of tokens
 allowed for a Client for the Origin within a policy window set in the
 "Sec-Token-Limit" header. This limit SHOULD NOT be unique to a specific
@@ -898,7 +898,7 @@ the Client is accessing (see {{privacy-considerations}}).
 
 ~~~
 :status = 200
-content-type = application/private-token-response
+content-type = message/token-response
 content-length = <Length of blind_sig>
 sec-token-origin-alias = index_key
 sec-token-limit = Token limit
@@ -913,7 +913,7 @@ response unmodified to the Client as the response to the original request for th
 
 Upon receipt of a successful (2xx) response from the Issuer, the Attester extracts the
 "Sec-Token-Origin-Alias" header, and uses the value to determine Issuer's Origin Alias
-as described in {{attester-output-anon-issuer-origin-id}}.
+as described in {{attester-output-issuers-origin-alias}}.
 
 If the "Sec-Token-Origin-Alias" header is missing in a successful (2xx) response from the
 Issuer, the Attester MUST count this towards penalizing the Issuer (see {{penalization}}).
@@ -1145,7 +1145,7 @@ the AEAD. Decrypting might produce an error, as follows:
 blind_sig, error = Open(aead_key, aead_nonce, "", ct)
 ~~~
 
-# Issuer's Origin Alias Computation {#anon-issuer-origin-id}
+# Issuer's Origin Alias Computation {#issuers-origin-alias}
 
 This section describes the Client, Attester, and Issuer behavior in computing
 Issuer's Origin Alias, the stable mapping based on client identity and
@@ -1171,11 +1171,11 @@ Client               Attester                Issuer
 ~~~
 
 The protocol for computing this functionality is divided into sections for
-each of the participants. {{client-anon-issuer-origin-id}} describes Client behavior
-for initiating the computation with its per-Client secret, {{attester-anon-issuer-origin-id}}
-describes Attester behavior for verifying Client requests, {{issuer-anon-issuer-origin-id}}
+each of the participants. {{client-issuers-origin-alias}} describes Client behavior
+for initiating the computation with its per-Client secret, {{attester-issuers-origin-alias}}
+describes Attester behavior for verifying Client requests, {{issuer-issuers-origin-alias}}
 describes Issuer behavior for computing the mapping with its per-Origin secret,
-and {{attester-output-anon-issuer-origin-id}} describes the final Attester step for
+and {{attester-output-issuers-origin-alias}} describes the final Attester step for
 computing the client-origin index.
 
 The index computation is based on a signature scheme with key blinding and unblinding
@@ -1203,7 +1203,7 @@ Additionally, each BKS scheme has a corresponding hash function, denoted `Hash`.
 The implementation of each of these functions depends on the issuance protocol
 token type. See {{iana-token-type}} for more details.
 
-## Client Behavior {#client-anon-issuer-origin-id}
+## Client Behavior {#client-issuers-origin-alias}
 
 This section describes the Client behavior for generating an one-time-use
 request key and signature. Clients provide their Client Secret as input
@@ -1256,7 +1256,7 @@ ctx = concat(encode(2, token_type)), "ClientBlind")
 request_signature = BKS-BlindKeySign(sk_sign, sk_blind, ctx, message)
 ~~~
 
-## Attester Behavior (Client Request Validation) {#attester-anon-issuer-origin-id}
+## Attester Behavior (Client Request Validation) {#attester-issuers-origin-alias}
 
 Given a TokenRequest request containing `request_key`, `request_signature`, and `request_blind`,
 as well as Client Key `pk_blind`, Attesters verify the signature as follows:
@@ -1284,7 +1284,7 @@ if not valid:
   raise InvalidSignatureError
 ~~~
 
-## Issuer Behavior {#issuer-anon-issuer-origin-id}
+## Issuer Behavior {#issuer-issuers-origin-alias}
 
 Given an Issuer Origin Secret (denoted `sk_origin`) and a TokenRequest, from which
 `request_key` and `request_signature` are parsed, Issuers verify
@@ -1310,7 +1310,7 @@ evaluated_key = BKS-BlindPublicKey(request_key, sk_origin, ctx)
 index_key = BKS-SerializePublicKey(evaluated_key)
 ~~~
 
-## Attester Behavior (Index Computation) {#attester-output-anon-issuer-origin-id}
+## Attester Behavior (Index Computation) {#attester-output-issuers-origin-alias}
 
 Given an Issuer response `index_key`, Client blind `sk_blind`, and Client
 Key (denoted pk_sign), Attesters complete the Issuer's Origin Alias computation as follows:
@@ -1402,7 +1402,7 @@ signatures on behalf of a given Client in an attempt to learn the origin name.
 The protocol in this document is designed such that information pertaining to issuance
 of a token is limited to parties that need it for completing the protocol. In particular,
 honest-but-curious Attesters learn only the Issuer's Origin Alias as described in
-{{anon-issuer-origin-id}}, any per-Client information necessary for attestation, and the
+{{issuers-origin-alias}}, any per-Client information necessary for attestation, and the
 target Issuer for a given token request. The Attester does not directly learn the origin
 name associated with a given token request, though it does learn the distribution of tokens
 across Client interactions. This auxiliary information could be used to infer the Origin
@@ -1549,7 +1549,7 @@ The details of the signature scheme with key blinding and unblinding functions f
 ### ECDSA-based Token Type {#ecdsa-sig-functions}
 
 This section describes the implementation details of the signature scheme with key
-blinding and unblinding functions introduced in {{anon-issuer-origin-id}} using
+blinding and unblinding functions introduced in {{issuers-origin-alias}} using
 {{ECDSA}} with P-384 as the underlying elliptic curve and SHA-384 as the corresponding
 hash function.
 
@@ -1582,7 +1582,7 @@ hash function.
 ### Ed25519-based Token Type {#eddsa-sig-functions}
 
 This section describes the implementation details of the signature scheme with key
-blinding and unblinding functions introduced in {{anon-issuer-origin-id}} using
+blinding and unblinding functions introduced in {{issuers-origin-alias}} using
 Ed25519 as described in {{!RFC8032}}.
 
 - BKS-KeyGen(): Generate a random Ed25519 private and public key pair (sk, pk), where
@@ -1634,7 +1634,7 @@ The authors also thank Frank Denis and David Schinazi for their contributions.
 # Test Vectors
 
 This section includes test vectors for Origin Name encryption in {{encrypt-origin}}
-and Client's Origin Alias computation in {{anon-issuer-origin-id}}. Test vectors for
+and Client's Origin Alias computation in {{issuers-origin-alias}}. Test vectors for
 the token request and response protocol can be found in {{ISSUANCE}}.
 
 ## Origin Name Encryption Test Vector
@@ -1694,14 +1694,14 @@ afbf2048890d54618d408a6001fc8fb276f6828c46f4fe1381e9775eec72ee47593df738
 
 ## Issuer's Origin Alias Test Vector
 
-The test vector below for the procedure in {{anon-issuer-origin-id}} lists the following values:
+The test vector below for the procedure in {{issuers-origin-alias}} lists the following values:
 
 - sk_client: Client Secret, serialized and represented as a hexadecimal string.
 - pk_client: Client Key, serialized and represented as a hexadecimal string.
 - sk_origin: Origin Secret, serialized and represented as a hexadecimal string.
 - request_blind: The request_blind value computed in {{index-request}}, represented as a hexadecimal string.
-- index_key: The index_key value computed in {{issuer-anon-issuer-origin-id}}, represented as a hexadecimal string.
-- issuer_origin_alias: The issuer_origin_alias value computed in {{attester-output-anon-issuer-origin-id}}, represented as a hexadecimal string.
+- index_key: The index_key value computed in {{issuer-issuers-origin-alias}}, represented as a hexadecimal string.
+- issuer_origin_alias: The issuer_origin_alias value computed in {{attester-output-issuers-origin-alias}}, represented as a hexadecimal string.
 
 ~~~
 sk_sign: f6e6a0c9de38663ca539ff2e6a04e4fca11dc569794dc405e2d17439d6ce4f6
