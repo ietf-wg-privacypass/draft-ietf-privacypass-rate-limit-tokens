@@ -232,7 +232,13 @@ error instead of the issuer's token response.
 ~~~
 {: #fig-example-deny title="Failed rate-limited issuance"}
 
-Each Issuer defines a window of time over which Attesters enforce rate limits.
+Each Issuer defines a window of time over which Attesters enforce rate limits,
+defined in the Issuer configuration directory ({{setup}}). This window might
+be as long as a month, or as short as an hour, depending on the use case. The
+window is the same across all Origins that work with the Issuer; if multiple
+window lengths are needed, then the entity running the Issuer can run multiple
+Issuers, one for each window length.
+
 The window begins upon a Client's first token request to the Attester for that
 Issuer and ends after the window time elapses, after which the Client's rate limit
 state is reset. Issuers indicate which rate limit to use for a given request by
@@ -576,7 +582,9 @@ to identify a Client.
 Attesters need to enforce that Clients don't change their Client Key frequently, to ensure Clients can't
 regularly evade the per-client policy as seen by the issuer. Attesters MUST NOT allow Clients to
 change their Client Key more than once within a policy window, or in the subsequent policy window
-after a previous Client Key change. Alternative schemes where the Attester stores the encrypted
+after a previous Client Key change. Chaning the secret will reset the client's policy window and
+thus can be used to exceed rate limits, so an Attester MUST penalize clients that register new secrets
+too frequently. Alternative schemes where the Attester stores the encrypted
 (Client Key, Client Secret) tuple on behalf of the client are possible but not described here.
 
 The Attester keeps track of Clients and Issuers that are not trusted, due to problems like
