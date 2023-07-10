@@ -1433,6 +1433,26 @@ security of the protocol does not depend on keeping this value secret from Clien
 even malicious Clients cannot tamper with per-Client state stored on the Attester for other
 Clients, as doing so requires knowledge of their unique Client Secret.
 
+## Rate Limit Enforcement
+
+Since the purpose of this token variant is to allow rate limits to be enforced on token
+issuance to Clients, the accuracy of the rate limit is an important part of evaluating
+the efficacy and security of a given deployment.
+
+The rate limit is enforced by the Attester based on state about the Client that only
+the Attester holds, where the state is kept on a per-Issuer and per-Origin basis. This means
+that the selection of both the Issuer and the Attester determines the state for the rate
+limit. As such, Origins SHOULD only send challenges for a single Issuer within a given
+period of time, in order to ensure that a Client is not able to get tokens across
+multiple Issuers and exceed the rate limit. Similarly, Issuers need to be selective
+in which Attesters they allow, to ensure that a single Client cannot trivially work
+with many Attesters in order to exceed the rate limit.
+
+Since the effectiveness of the rate limit requires a bounded set of Attesters for any
+particular use case, deployments need to consider the impact on centralization in order
+to ensure that new Attesters can still join the overall ecosystem. See the discussion
+on centralization in {{ARCH}}.
+
 # Privacy Considerations {#privacy-considerations}
 
 This section describes privacy considerations relevant to use of this protocol.
