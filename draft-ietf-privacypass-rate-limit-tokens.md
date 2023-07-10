@@ -482,10 +482,13 @@ names to use for the encrypted message. In general, the Client SHOULD
 select the origin name that presented the challenge. However, in the context
 of loading a webpage, the Client SHOULD prefer using the name of the
 main document URL (the first-party name, as opposed to a third-party name)
-if it is present in the origin_info list. Issuers need to ensure that they
-only allow rate-limiting on expected origins, which for the case of websites
-with challenges originating from third-parties would generally be the
-first-party name.
+if it is present in the origin_info list. This allows a third-party (an
+embedded website resource) to send a challenge that applies a rate-limit
+to the first party name (the origin that hosts the main document URL).
+If a third-party is sending challenges in this way (that contain both the
+first- and third-party origin names), the Issuers need to ensure that they
+only allow rate-limiting on the expected origin (which SHOULD be the
+first-party name, to align with Client behavior).
 
 The HTTP authentication challenge also SHOULD contain the following
 additional attribute:
