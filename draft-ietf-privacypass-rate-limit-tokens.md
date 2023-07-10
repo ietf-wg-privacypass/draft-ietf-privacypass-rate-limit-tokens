@@ -237,7 +237,7 @@ defined in the Issuer configuration directory ({{setup}}). This window might
 be as long as a month, or as short as an hour, depending on the use case. The
 window is the same across all Origins that work with the Issuer; if multiple
 window lengths are needed, then the entity running the Issuer can run multiple
-Issuers, one for each window length.
+Issuers with different Issuer names, one for each window length.
 
 The window begins upon a Client's first token request to the Attester for that
 Issuer and ends after the window time elapses, after which the Client's rate limit
@@ -582,8 +582,8 @@ to identify a Client.
 Attesters need to enforce that Clients don't change their Client Key frequently, to ensure Clients can't
 regularly evade the per-client policy as seen by the issuer. Attesters MUST NOT allow Clients to
 change their Client Key more than once within a policy window, or in the subsequent policy window
-after a previous Client Key change. Chaning the secret will reset the client's policy window and
-thus can be used to exceed rate limits, so an Attester MUST penalize clients that register new secrets
+after a previous Client Key change. Changing the secret will reset the client's policy window and
+thus can be used to exceed rate limits. One way to mitigate this is for the Attester to penalize clients that register new secrets
 too frequently. Alternative schemes where the Attester stores the encrypted
 (Client Key, Client Secret) tuple on behalf of the client are possible but not described here.
 
