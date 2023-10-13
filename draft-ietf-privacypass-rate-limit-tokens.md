@@ -422,6 +422,7 @@ Issuers MUST provide the following parameters for configuration:
 1. Issuer Request URI: a token request URL for generating access tokens.
    For example, an Issuer URL might be https://issuer.example.net/token-request. This parameter
    uses resource media type "text/plain".
+1. Issuer Public Key values: A list of Issuer Public Keys for the issuance protocol, each scoped to a particular origin.
 1. Issuer Encapsulation Key: a `EncapsulationKey` structure as defined below to use when encapsulating
    information, such as the origin name, to the Issuer in issuance requests. This parameter uses resource media type
    "application/issuer-encap-key". The Npk parameter corresponding to the HpkeKdfId can be found in {{HPKE}}.
@@ -449,6 +450,11 @@ object whose field names and values are raw values and URLs for the parameters.
 | issuer-policy-window | Issuer Policy Window as a JSON number            |
 | issuer-request-uri   | Issuer Request URI resource URL as a JSON string |
 | encap-keys           | List of Encapsulation Key values, each as a base64url encoded EncapsulationKey value |
+| token-keys           | List of Token Key values, each represented as JSON objects |
+
+The "token-keys" JSON object is inherited from the basic issuance {{ISSUANCE}} protocol,
+with an additional key "origin", which is a JSON string that indicates which origin
+is bound to the key.
 
 Issuers MAY advertise multiple encap-keys to support key rotation, where the order
 of the keys in the list indicates preference as with token-keys.
@@ -461,18 +467,28 @@ As an example, the Issuer's JSON directory could look like:
     "issuer-request-uri": "https://issuer.example.net/token-request",
     "encap-keys": [
       <encoded EncapsulationKey>
+    ],
+    "token-keys": [
+      {
+        "token-type": 3,
+        "token-key": "MI...AB",
+        "origin": "example.com"
+      },
+      {
+        "token-type": 3,
+        "token-key": "MI...AQ"
+        "origin": "example.net"
+      }
     ]
  }
 ~~~
 
 Issuers MUST support at least one Token Key per origin. Issuers MAY support
 multiple Token Key values for the same Origin in order to support rotation.
-Origin configuration for Issuers is out of scope for this document, and so
-the mechanism by which Origins obtain their Token Key value is not specified
-here.
 
-Issuer directory resources have the media type "application/json"
-and are located at the well-known location /.well-known/token-issuer-directory.
+As in {{ISSUANCE}}, Issuer directory resources have the media type
+"application/json" and are located at the well-known location
+"/.well-known/token-issuer-directory".
 
 # Token Challenge Requirements
 
@@ -1501,12 +1517,48 @@ at specific Clients or sets of Clients.
 As with the basic issuance protocol {{ISSUANCE}}, the token_key_id is truncated to a single
 octet to mitigate the risk of unique keys per client.
 
-To mitigate the risk of a targeted Issuer Encapsulation Key, the Attester can observe and validate
-the issuer_encap_key_id presented by the Client to the Issuer. As described in {{request-one}}, Attesters
-MUST validate that the issuer_encap_key_id in the Client's TokenRequest matches a known Issuer
+Clients SHOULD prevent targeting attacks by checking the consistency of the encapsulation
+key across time and across other clients. Consistency for privacy pass keys is described in
+{{?CONSISTENCY=I-D.ietf-privacypass-key-consistency}}.
+{{?CONSISTENCY-MIRROR=I-D.group-privacypass-consistency-mirror}} describes a specific
+approach in which Clients can check the consistency of a key using a mirror server.
+Since encapsulation keys are available in the Issuer well-known configuration ({{setup}}),
+the Client can fetch the configuration via a mirror to perform a consistency check.
+
+Clients can also detect inconsistency if the encapsulation key changes across multiple
+challenges (indicating that an Origin might be trying to target Clients, but did not
+recognize the Client across two requests). If such changes are detected multiple times
+within a short period of time, Clients MUST NOT fetch more tokens using the key.
+
+The Attester can also help ensure consistency with an in-band check, which conforms
+to the approach in {{?CONSISTENCY-INBAND=I-D.pw-privacypass-in-band-consistency}}.
+The Attester can observe and validate the issuer_encap_key_id presented by the Client to
+the Issuer. As described in {{request-one}}, Attesters MUST validate that the
+issuer_encap_key_id in the Client's TokenRequest matches a known Issuer
 Encapsulation Key public key for the Issuer. The Attester needs to support key rotation, but
 ought to disallow very rapid key changes, which could indicate that an Origin is colluding with
 an Issuer to try to rotate the key for each new Client in order to link the client activity.
+
+## Client Identification with Unique Per-Origin Token Keys
+
+Client activity could also be linked if an Origin and Issuer collude to use a unique
+key for the Token Keys, which are per-origin.
+
+Since Attesters do not see per-origin identities that can be correlated across Clients,
+Attesters cannot perform in-band consistency checks.
+
+Clients SHOULD prevent targeting attacks by checking the consistency of token keys
+key across time and across other clients. Consistency for privacy pass keys is described in
+{{?CONSISTENCY=I-D.ietf-privacypass-key-consistency}}.
+{{?CONSISTENCY-MIRROR=I-D.group-privacypass-consistency-mirror}} describes a specific
+approach in which Clients can check the consistency of a key using a mirror server.
+Since per-origin token keys are available in the Issuer well-known configuration ({{setup}}),
+the Client can fetch the configuration via a mirror to perform a consistency check.
+
+Clients can detect inconsistency if the token key for an Origin-Issuer pair changes across
+multiple challenges (indicating that an Origin might be trying to target Clients, but did not
+recognize the Client across two requests). If such changes are detected multiple times
+within a short period of time, Clients MUST NOT fetch more tokens using the key.
 
 ## Origin Identification
 
