@@ -1517,8 +1517,7 @@ at specific Clients or sets of Clients.
 As with the basic issuance protocol {{ISSUANCE}}, the token_key_id is truncated to a single
 octet to mitigate the risk of unique keys per client.
 
-Clients SHOULD prevent targeting attacks by checking the consistency of the encapsulation
-key across time and across other clients. Consistency for privacy pass keys is described in
+Clients SHOULD check encapsulation key consistency to help mitigate targeting attacks. Consistency for Privacy Pass resources such as Issuer directories and token keys is described in
 {{?CONSISTENCY=I-D.ietf-privacypass-key-consistency}}.
 {{?CONSISTENCY-MIRROR=I-D.group-privacypass-consistency-mirror}} describes a specific
 approach in which Clients can check the consistency of a key using a mirror server.
@@ -1527,8 +1526,8 @@ the Client can fetch the configuration via a mirror to perform a consistency che
 
 Clients can also detect inconsistency if the encapsulation key changes across multiple
 challenges (indicating that an Origin might be trying to target Clients, but did not
-recognize the Client across two requests). If such changes are detected multiple times
-within a short period of time, Clients MUST NOT fetch more tokens using the key.
+recognize the Client across two requests). Encapsulation key changes within a short
+period of time can indicate that the Origin is attempting to target the Client.
 
 The Attester can also help ensure consistency with an in-band check, which conforms
 to the approach in {{?CONSISTENCY-INBAND=I-D.pw-privacypass-in-band-consistency}}.
@@ -1542,13 +1541,13 @@ an Issuer to try to rotate the key for each new Client in order to link the clie
 ## Client Identification with Unique Per-Origin Token Keys
 
 Client activity could also be linked if an Origin and Issuer collude to use a unique
-key for the Token Keys, which are per-origin.
+per-origin Token Key.
 
 Since Attesters do not see per-origin identities that can be correlated across Clients,
 Attesters cannot perform in-band consistency checks.
 
-Clients SHOULD prevent targeting attacks by checking the consistency of token keys
-key across time and across other clients. Consistency for privacy pass keys is described in
+Clients SHOULD check encapsulation key consistency to help mitigate targeting attacks.
+Consistency for Privacy Pass resources such as Issuer directories and token keys is described in
 {{?CONSISTENCY=I-D.ietf-privacypass-key-consistency}}.
 {{?CONSISTENCY-MIRROR=I-D.group-privacypass-consistency-mirror}} describes a specific
 approach in which Clients can check the consistency of a key using a mirror server.
@@ -1557,8 +1556,8 @@ the Client can fetch the configuration via a mirror to perform a consistency che
 
 Clients can detect inconsistency if the token key for an Origin-Issuer pair changes across
 multiple challenges (indicating that an Origin might be trying to target Clients, but did not
-recognize the Client across two requests). If such changes are detected multiple times
-within a short period of time, Clients MUST NOT fetch more tokens using the key.
+recognize the Client across two requests). Token key changes within a short
+period of time can indicate that the Origin is attempting to target the Client.
 
 ## Origin Identification
 
