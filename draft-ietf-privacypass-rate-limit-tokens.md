@@ -1622,8 +1622,8 @@ This document updates the "Token Type" Registry ({{AUTHSCHEME}}) with the follow
 
 | Value  | Name                                                                 | Publicly Verifiable | Public Metadata | Private Metadata | Nk  | Nid | Reference        |
 |:-------|:---------------------------------------------------------------------|:--------------------|:----------------|:-----------------|:----|:----|:-----------------|
-| 0x0003 | Rate-Limited Blind RSA(SHA-384, 2048-bit) with ECDSA(P-384, SHA-384) | Y                   | N               | N                | 512 | 32  | This document    |
-| 0x0004 | Rate-Limited Blind RSA(SHA-384, 2048-bit) with Ed25519(SHA-512)      | Y                   | N               | N                | 512 | 32  | This document    |
+| 0x0003 (suggested) | Rate-Limited Blind RSA(SHA-384, 2048-bit) with ECDSA(P-384, SHA-384) | Y                   | N               | N                | 512 | 32  | This document    |
+| 0x0004 (suggested) | Rate-Limited Blind RSA(SHA-384, 2048-bit) with Ed25519(SHA-512)      | Y                   | N               | N                | 512 | 32  | This document    |
 {: #aeadid-values title="Token Types"}
 
 The details of the signature scheme with key blinding and unblinding functions for each token type above are described in the following sections.
