@@ -1,0 +1,379 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-11-17T01:47:56.507707+00:00",
+  "repo": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOH668Ec5RAbDd",
+      "title": "Should the token key ID be only one bit?",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/1",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From https://github.com/tfpauly/privacy-proxy/issues/222\r\n\r\n> With https://github.com/tfpauly/privacy-proxy/pull/220, we have a 8-bit key ID that the issuer (but not attester) sees. We can consider moving this to be one bit only, to allow rotation while not having to worry about key targeting/consistency checks.",
+      "createdAt": "2022-09-01T15:50:33Z",
+      "updatedAt": "2022-09-01T15:50:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOH668Ec5RAbTf",
+      "title": "Rate-Limited Tokens: Preventing attester from learning rate limit",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/2",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From https://github.com/tfpauly/privacy-proxy/issues/219\r\n\r\n> In the current proposal, the attester learns the rate limit specific to the origin. This reduces the anonymity set to origins that share a common rate. Below, I describe an idea that prevents the attester from learning this rate.\r\n> \r\n> Simplified summary of current proposal:\r\n> \r\n> (as I understand it so far; for sake of comparison)\r\n> \r\n> client sends BlindSigReq to attester\r\n> attester forwards BlindSigReq to issuer\r\n> issuer responds with BlindSigResponse and the origin's RateLimit\r\n> attester enforces RateLimit based on H(client,origin) pair\r\n> if rate limit OK, attester forwards BlindSigResponse to client\r\n> client unpacks to learn its desired blind signature token\r\n> Main idea\r\n> \r\n> The main idea is to let the client request its entire quota of tokens in a single interaction, instead of requesting them one at a time. For this, I must make a distinction between an interaction and a token.\r\n> \r\n> Let's say that all rate limits are expressed in the units of tokens / hour. Then the attester will simply check that there is at most 1 interaction, per (client,origin) pair, per hour. The attester's check is the same for all origins (1 interaction per hour), regardless of their true rate limit. But each \"interaction\" results in the client learning many tokens. The issuer already knows the rate limit (expressed in tokens per hour) so it enforces the rate limit by only giving out the correct # of tokens in a single interaction.\r\n> \r\n> Simplified summary of new proposal:\r\n> \r\n> For the sake of simplicity, I will assume that both client and issuer know the origin's desired rate limit.\r\n> I will extend the notation so that BlindSigReq(n) <--> BlindSigResponse(n) is a blind signature protocol where the client learns n distinct signatures.\r\n> \r\n> client sends BlindSigReq(RateLimit) to attester, where RateLimit is the origin's limit\r\n> attester forwards BlindSigReq(RateLimit) to issuer\r\n> issuer responds with BlindSigResponse(RateLimit)\r\n> attester checks: was there a prior request on this (client,origin) pair in the last hour?\r\n> if no such prior request, then attester forwards BlindSigResponse(RateLimit) to client\r\n> client unpacks to learn RateLimit number of blind signature token\r\n> In order to hide the rate limit from the attester, the BlindSig{Req,Response} protocol messages must hide the rate limit. I'm not sure if there are blind signatures or [V]OPRFs where the client can get several distinct tokens, in a protocol messages of constant size. However, I have some hope because the client mostly cares about the number of tokens learned, and is less concerned about what message is being signed. I.e., the client could learn signatures on a collection of random messages.\r\n> \r\n> If such a blind signature or OPRF is not possible/feasible, then a trivial way to hide the rate limit is to pad the size of the protocol message to some maximum limit. One could also consider leaking only partial information about the rate limit -- e.g., round the rate limit up to the nearest power of two and pad the protocol messages to that size. A downside to this simple padding strategy is that it is wasteful of bandwidth by design.",
+      "createdAt": "2022-09-01T15:51:20Z",
+      "updatedAt": "2022-09-01T15:51:20Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOH668Ec5SpZAp",
+      "title": "Allow rate-limited origin to be someone other than the challenger",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/5",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "If a first party origin allows a third party origin to issue challenges on its behalf, and the origin_info includes both the first and third party names, we should allow the origin used for rate-limiting to be the first party.",
+      "createdAt": "2022-09-26T19:15:42Z",
+      "updatedAt": "2022-09-26T19:15:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOH668Ec5UKATh",
+      "title": "Malicious Issuer with a colluding Origin breaks unlinkability Attesters",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/6",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "*TL;DR*: An attacker can re-use the same OPRF key (Issuer Origin Secret, denoted `sk_origin` in pseudocode) for each origin to track clients across origins if the attester doesn't implement a security-critical check.\r\n\r\n# Simplified example\r\n\r\nImagine there are two users, X and Y, each with public key g^x and g^y, respectively. and two origins, O1 and O2. Imagine further that the attacker controlling O1 and O2 colludes with the Issuer and wants to track when a user visits both O1 and O2. Finally, imagine the rate limit to each origin is 1. \r\n\r\nUnlinkability asserts that an attacker cannot distinguish between the following scenarios:\r\n\r\n1. X visiting O1 and then Y visiting O2\r\n2. X visiting O1 and then X visiting O2\r\n\r\nRecall that the anonymous issuer origin ID is computed roughly as Hash(g^x, g^xk), where g^x is a client public key and g^xk is the result of the client's public key evaluated by the issuer OPRF key.\r\n\r\nIf a malicious issuer uses the same OPRF key k across O1 and O2, then the these two scenarios end up computing the following:\r\n\r\n1. Hash(g^x, g^xk), Hash(g^y, g^yk)\r\n2. Hash(g^x, g^xk), Hash(g^x, g^xk)\r\n\r\nIf the rate limit is 1, then X's second visit in (2) will fail, which is the distinguishing event.\r\n\r\n# Root of the problem\r\n\r\nThe root of the problem is that the Issuer's input to the OPRF is unverified. Addressing this either requires we relax the threat model and assume the Issuer is honest-but-curious, which seems like a subpar outcome, or try to fix the protocol. Unfortunately, with the current design, fixing this issue is challenging since any sort of \"public verifiability\" might open up dictionary attacks by the Attester, which the protocol aims to prevent. \r\n\r\nThere are likely a couple ways this could be addressed, each with different complexity:\r\n\r\n1. Make the Client \"stateful,\" so it can check whether or not the same anonymous issuer origin ID is computed across origins, and fail if this ever occurs. This may be problematic in practice due to the number of distinct origins and keys the client needs to remember.\r\n2. Move the anonymous issuer origin ID computation to the client without any involvement from either Attester or Issuer, using a combination of standard zero-knowledge proofs. This has the benefit of simplifying both Attester and Issuer, and also allowing the Attester to enforce rate limits _before_ querying the Issuer.\r\n\r\nWe're currently investigating (2) and will report back when we have a better handle on the resulting security analysis and implementation status.",
+      "createdAt": "2022-10-17T17:00:03Z",
+      "updatedAt": "2022-10-24T13:27:06Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "For clarity, the OPRF in this case refers to the \"Issuer Origin Secret\" in the document.\r\n\r\nIn general, the Attester can enforce what rate limits it allows Issuers to have, since it is the one actually applying various limits. We've discussed having attesters disallow limits of 1 for various reasons. Of course, this same pattern could exist at higher limits, but it becomes more speculative.\r\n\r\nI'm also curious how this interacts with the Attester's checks, specifically:\r\n\r\n> If the \"Sec-Token-Origin\" is missing, or if the same Anonymous Issuer Origin ID was previously received in a response for a different Anonymous Origin ID within the same policy window, the Attester MUST drop the token and respond to the client with an HTTP 400 status.\r\n\r\nThe point of that check is to detect a collision between two different origins, where the client says there are two origins, but the issuer says there is only one. Without the details of the attack here, how can the issuer cause a rate limit to be incorrectly applied by the attester without falling afoul of this check?",
+          "createdAt": "2022-10-17T17:45:03Z",
+          "updatedAt": "2022-10-17T17:45:03Z"
+        },
+        {
+          "author": "dvorak42",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Even with moderate rate limits I think this is still a pretty substantial problem, you'd need something like minimum rate limits of 10+ to mitigate the basic version of this attack (and it seems colluding origin can just always redeem N/2+1 tokens at a time against a total rate limit of N to devolve the issue to the same as the rate limit of 1 case?).\r\n\r\nThe stateful version might be okay as a stopgap or for certain ecosystems, but I'm not sure it is particularly feasible at web/browser-scale and there's also potential edge cases where if the client fails to complete the privacypass redemption on an origin, it can learn with some probability that the client likely saw a previous origin with the same anon issuer origin ID and learn approximately the same information.\r\n\r\nI'm curious about the new design for the client-provided ID, seems like you still need some origin/issuer input to bind the client's anon origin ID to prevent it from pretending the same origin has many different identities, but maybe there's something clever with some known component of the origin and ZKPs you can do?",
+          "createdAt": "2022-10-17T19:00:36Z",
+          "updatedAt": "2022-10-17T19:00:36Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "One more question on the proverif model \u2014 what was it thinking the Issuer Origin Secret and Anonymous Issuer Origin ID were used for at all? The only thing that should be used for is this enforcement check. The secret leads to the index_key, and then the attester validates the index_key and generates the anon_issuer_origin_id. And that Anonymous Issuer Origin ID value is only used by the attester for enforce the 1:1 check.\r\n\r\nTo that end, if there is a reused Issuer Origin Secret, I don't see how it could lead to the attack you describe without the client also aligning its origin IDs and lying in the exact same way. The actual buckets for rate limits are not determining by the Anonymous Issue Origin ID, but only the client-supplied Anonymous Origin ID:\r\n\r\n```\r\nFor each tuple of (Client Key, Anonymous Origin ID, policy window), the Attester maintains the following state:\u00b6\r\n\r\nA counter of successful tokens issued\u00b6\r\nWhether or not a previous request was rejected by the Issuer\u00b6\r\nThe previous rate limit provided by the Issuer\u00b6\r\nThe last received Anonymous Issuer Origin ID value for this Anonymous Origin ID, if any\u00b6\r\n```",
+          "createdAt": "2022-10-18T15:24:39Z",
+          "updatedAt": "2022-10-18T15:24:39Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The model currently uses the Anonymous Issuer Origin ID as the index for book keeping, _not_ the Anonymous Origin ID. I _think_ using the latter would prevent the issue, too, which is a good observation!",
+          "createdAt": "2022-10-18T16:08:09Z",
+          "updatedAt": "2022-10-18T16:08:09Z"
+        },
+        {
+          "author": "nikitaborisov",
+          "authorAssociation": "NONE",
+          "body": "It's not clear to me that using the Anonymous Origin ID entirely solves the problem. In @chris-wood's example, with a rate limit of 1, we would want the two situations to be indistinguishable. But with the malicious issuer, the first situation succeeds at getting a token for both accesses, whereas the second situation fails. Without the anonymous origin check, it will fail because of the rate limit; with the check, it will fail because the origins do not match, but either way it will fail and that is observable.\r\n\r\nMaybe you can use this check to detect a misbehaving issuer? You can't immediately assume that the issuer is compromised if the anonymous origin id check fails, because the client could simply use the same origin ID for two different origins. But perhaps in that case you could ask the origin to provide a verifiable decryption of the HPKE messages from the client to show that the client is misbehaving.",
+          "createdAt": "2022-10-18T20:38:00Z",
+          "updatedAt": "2022-10-18T20:38:00Z"
+        },
+        {
+          "author": "nikitaborisov",
+          "authorAssociation": "NONE",
+          "body": "Incidentally, I find the phrase Anonymous Issuer Origin ID confusing; first because it's a complicated word easily confused with Anonymous Origin ID, and second because I think of a stable mapping as a pseudonym, whereas anonymity to me suggests full unlinkability.",
+          "createdAt": "2022-10-18T20:39:19Z",
+          "updatedAt": "2022-10-18T20:39:19Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Without the anonymous origin check, it will fail because of the rate limit; with the check, it will fail because the origins do not match, but either way it will fail and that is observable.\r\n\r\n@nikitaborisov I don't think this is true. Notice in the example that the rate limits aren't actually exceeded. In (1), X and Y make two separate visits, whereas in (2) X makes two visits to two distinct origins. The limit is never exceeded by X or Y.",
+          "createdAt": "2022-10-18T21:05:45Z",
+          "updatedAt": "2022-10-18T21:05:45Z"
+        },
+        {
+          "author": "nikitaborisov",
+          "authorAssociation": "NONE",
+          "body": "Let me try to clarify:\r\n- Honest issuer: (1) and (2) both succeed at issuing tokens\r\n- Malicious issuer, no anonymous origin ID check: (1) succeeds because the anonymous issuer ID is different across two visits (b/c X and Y have different public keys), (2) fails because the anonymous issuer ID is the same across both visits and the rate limit is hit\r\n- Malicious issuer, with anonymous origin ID check: (1) succeeds because the check is never applied on the first visit by a client, (2) fails because the anonymous issuer ID is the same and the collision is detected by the attester.",
+          "createdAt": "2022-10-18T21:10:43Z",
+          "updatedAt": "2022-10-18T21:10:43Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Right, but we have to assume that exceeding the rate limit is a distinguishing event, i.e., there's nothing that can be done about that, regardless of how the issuance protocol works. So the interesting case here seems to be how a distinguishing event can arise in the absence of rate limit exceeded events.",
+          "createdAt": "2022-10-18T21:34:55Z",
+          "updatedAt": "2022-10-18T21:34:55Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nikitaborisov the attester as described in the protocol uses does not use the anonymous issuer origin ID for _anything_ other than the check. Thus, the entire premise of a malicious issuer can only interfere with this check, because the rate limit buckets that are enforced by the attester are based on the anonymous origin ID presented by the Client. The issue in this issue was that the model was thinking the attester bases its bucket on the issuer-provided values.\r\n\r\nAs such, the \"malicious issuer\" really ends up causing the attester to fail some requests as invalid \u2014 which doesn't even get to the rate limiting logic yet.",
+          "createdAt": "2022-10-18T23:05:37Z",
+          "updatedAt": "2022-10-18T23:05:37Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What's problematic here is that the spec is not clear on what the right bucket value should be -- the editors aren't even in agreement! The spec says this:\r\n\r\n> The **Anonymous Issuer Origin ID** is used to track and enforce the Client rate limit\r\n\r\nIt also says this: \r\n\r\n> For each tuple of (Client Key, **Anonymous Origin ID**, policy window), the Attester maintains the following state: \r\n\r\nWe were operating under a different understanding of the protocol. Nevertheless, we need to make clear what is used for what purpose, and we should use this opportunity to seriously consider if there aren't simpler and less fragile variants of this protocol.",
+          "createdAt": "2022-10-18T23:22:22Z",
+          "updatedAt": "2022-10-18T23:22:22Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I agree this is something that needs to be made more clear in the spec. Also if there are ways to simplify that uphold the same properties, that's good. ",
+          "createdAt": "2022-10-19T03:26:54Z",
+          "updatedAt": "2022-10-19T03:26:54Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chris-wood to fix up the document now: https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/pull/7\r\n\r\nApologies for not catching this in the original review of https://github.com/tfpauly/privacy-proxy/pull/216. That's my bad.",
+          "createdAt": "2022-10-19T03:44:59Z",
+          "updatedAt": "2022-10-19T03:44:59Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Coming back to @nikitaborisov's comment (I'm getting myself really confused here)... \r\n\r\nIt is true that in the two cases he described -- one with the check and one without -- there is a distinguishing event because one visit will succeed and one will fail. In one case, the failure is caused by exceeding the rate limit, and in the other case the failure is caused by the attester enforcing the check. Thus, as @nikitaborisov I think was trying to point out, the event exists with or without the check in place. ",
+          "createdAt": "2022-10-19T12:02:09Z",
+          "updatedAt": "2022-10-19T12:02:09Z"
+        },
+        {
+          "author": "nikitaborisov",
+          "authorAssociation": "NONE",
+          "body": "Thanks @tfpauly for the clarification! So if I understand: the client's ID is used as the index for the rate-limit state and the OPRF is used to make sure the client does not use two different indices for the same origin. \r\n\r\nAs @chris-wood stated just above, the issue remains that the malicious issuer can cause this check to fail when a single client visits two distinct sites, but not in any other cases. You can even target this attack by origin (e.g., I want to collude with foo.com and bar.com to cause an error whenever a single person tries to visit both). This seems like an undesirable linkability problem.",
+          "createdAt": "2022-10-19T12:59:18Z",
+          "updatedAt": "2022-10-19T12:59:18Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nikitaborisov correct: the client's ID is used as the index for rate-limiting, and the OPRF is used to validate that the client does not use different values for one origin.\r\n\r\nI do see your point now, that the malicious issuer can cause the validation check to fire. I think it's something that the attester in practice would easily detect if used at any kind of scale \u2014 if all of sudden, many checks started failing across many clients, that would be a strong indicator that we have a compromised or malicious issuer. But I agree that a way to avoid that need for enforcement is nice.",
+          "createdAt": "2022-10-19T14:28:27Z",
+          "updatedAt": "2022-10-19T14:28:27Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOH668Ec5UuDAO",
+      "title": "Make attester anomaly detection and reaction more clear",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/8",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "One way to fix #6 is to not immediately fail requests when a bucket collides, but instead treat it more like the other types of anomaly detection performed on the attester.\r\n\r\nAnomaly detection on the attester:\r\n- If you change you client secret too much, you're out\r\n- If you have too many collisions for a client, you're out\r\n- If you have too many collisions for an issuer, it is out",
+      "createdAt": "2022-10-24T19:57:20Z",
+      "updatedAt": "2022-10-24T19:57:20Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOH668Ec5WbtWB",
+      "title": "text about rate-limits being enforced by a single attester / issuer pair",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/issues/9",
+      "state": "OPEN",
+      "author": "nikitaborisov",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The PP arch document discusses the possibilities of an issuer potentially working with more than one attester. Likewise, an origin can work with multiple issuers. I think there should be some text that clarifies that in such cases, the rate limits enforced by a different attester and/or issuer would not apply to the user. Or, to put it a different way, the entity that is being rate-limited is _defined_ by the attester working together with an issuer. ",
+      "createdAt": "2022-11-15T17:03:10Z",
+      "updatedAt": "2022-11-15T17:35:42Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Correct, that's a good point. The Issuer chosen by the Origin must be selected in such a way that it will not allow working with Attesters that allow too much overlap \u2014 i.e., if you work with attesters based on hardware, it's fine, but don't mix email account and hardware attesters since you could have many of those.",
+          "createdAt": "2022-11-15T17:35:41Z",
+          "updatedAt": "2022-11-15T17:35:41Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 3,
+      "id": "PR_kwDOH668Ec4-f0GD",
+      "title": "Template updates",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/pull/3",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "So it seems like I messed a few things up.  The changes I've made break caching in builds, which can add a bunch of time to your builds (it won't break anything, but the build goes slower).  As you set this repo up recently, you get a free PR with some updates to files that should improve performance.",
+      "createdAt": "2022-09-07T09:50:42Z",
+      "updatedAt": "2022-09-07T13:12:42Z",
+      "baseRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "baseRefName": "main",
+      "baseRefOid": "06b63b04e2d27764634136294e6006b5d95dd183",
+      "headRepository": "martinthomson/draft-ietf-privacypass-rate-limit-tokens",
+      "headRefName": "template-updates",
+      "headRefOid": "b7abbf61d33a216a2704e407acd4c106117a0fdb",
+      "closedAt": "2022-09-07T13:12:42Z",
+      "mergedAt": "2022-09-07T13:12:42Z",
+      "mergedBy": "dvorak42",
+      "mergeCommit": {
+        "oid": "29e21877fc4a98e7e493f93b7a3d167c80f8a35e"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOH668Ec4_oEUa",
+      "title": "Remove dangling Sec-Token-Request-Key text",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/pull/4",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-26T17:16:02Z",
+      "updatedAt": "2022-09-26T17:22:25Z",
+      "baseRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "baseRefName": "main",
+      "baseRefOid": "29e21877fc4a98e7e493f93b7a3d167c80f8a35e",
+      "headRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "2151269dd72ab6c36de6b257864683465a82c218",
+      "closedAt": "2022-09-26T17:22:25Z",
+      "mergedAt": "2022-09-26T17:22:25Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "5d5f528996185c789d26db8c8e09c9cca874d62a"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "\ud83e\udd26 ",
+          "createdAt": "2022-09-26T17:22:21Z",
+          "updatedAt": "2022-09-26T17:22:21Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOH668Ec5Cy5fk",
+          "commit": {
+            "abbreviatedOid": "2151269"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-09-26T17:22:14Z",
+          "updatedAt": "2022-09-26T17:22:14Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOH668Ec5BEdNN",
+      "title": "Fix protocol overview's description of Issuer/Attester roles",
+      "url": "https://github.com/ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens/pull/7",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "The protocol overview doesn't quite match the normative protocol text right now with regards to issuer and attester behavior.\r\n\r\n- The attester is the one that actually applies the rate limit\r\n- This is based on counts that are bucketed using the anonymous origin ID from the client\r\n- The anonymous issuer origin ID is used only to validate the uniqueness of client-generated anonymous origin IDs",
+      "createdAt": "2022-10-19T03:41:33Z",
+      "updatedAt": "2022-10-19T03:41:33Z",
+      "baseRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "baseRefName": "main",
+      "baseRefOid": "5d5f528996185c789d26db8c8e09c9cca874d62a",
+      "headRepository": "ietf-wg-privacypass/draft-ietf-privacypass-rate-limit-tokens",
+      "headRefName": "tfpauly-patch-2",
+      "headRefOid": "bf50b30001f2a694243de7b156726450d0d11f1e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
