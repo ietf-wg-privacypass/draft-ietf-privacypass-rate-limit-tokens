@@ -1688,7 +1688,7 @@ Ed25519 as described in {{!RFC8032}}.
 ## HTTP Headers {#iana-headers}
 
 This document registers four new headers for use on the token issuance path
-in the "Permanent Message Header Field Names" <[](https://www.iana.org/assignments/message-headers)>.
+in the "Hypertext Transfer Protocol (HTTP) Field Name Registry" <[](https://www.iana.org/assignments/http-fields)>.
 
 ~~~
     +-------------------------+----------+--------+---------------+
