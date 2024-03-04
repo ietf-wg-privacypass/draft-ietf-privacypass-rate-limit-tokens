@@ -5,14 +5,14 @@
 Network Working Group                                     S. Hendrickson
 Internet-Draft                                                Google LLC
 Intended status: Informational                                J. Iyengar
-Expires: 5 May 2024                                               Fastly
+Expires: 5 September 2024                                         Fastly
                                                                 T. Pauly
                                                               Apple Inc.
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                         2 November 2023
+                                                            4 March 2024
 
 
                   Rate-Limited Token Issuance Protocol
@@ -52,11 +52,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 May 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -558,15 +558,14 @@ Table of Contents
    +======================+============================================+
    | Field Name           | Value                                      |
    +======================+============================================+
-   | issuer-policy-window | Issuer Policy Window as a JSON             |
-   |                      | number                                     |
+   | issuer-policy-window | Issuer Policy Window as a JSON number      |
    +----------------------+--------------------------------------------+
-   | issuer-request-uri   | Issuer Request URI resource                |
-   |                      | URL as a JSON string                       |
+   | issuer-request-uri   | Issuer Request URI resource URL as a       |
+   |                      | JSON string, as defined in [ISSUANCE]      |
    +----------------------+--------------------------------------------+
-   | encap-keys           | List of Encapsulation Key                  |
-   |                      | values, each as a base64url                |
-   |                      | encoded EncapsulationKey value             |
+   | encap-keys           | List of Encapsulation Key values,          |
+   |                      | each as a base64url encoded                |
+   |                      | EncapsulationKey value                     |
    +----------------------+--------------------------------------------+
    | token-keys           | List of Token Key values, each             |
    |                      | represented as JSON objects                |
@@ -609,8 +608,11 @@ Table of Contents
    support rotation.
 
    As in [ISSUANCE], Issuer directory resources have the media type
-   "application/json" and are located at the well-known location
-   "/.well-known/token-issuer-directory".
+   "application/private-token-issuer-directory" and are located at the
+   well-known location "/.well-known/private-token-issuer-directory".
+
+   Issuers SHOULD use HTTP cache directives to permit caching of this
+   resource [RFC5861], as defined in the issuance [ISSUANCE] protocol.
 
 4.  Token Challenge Requirements
 
@@ -939,10 +941,10 @@ Table of Contents
 
    The Client then generates an HTTP POST request to send through the
    Attester to the Issuer, with the TokenRequest as the body.  The media
-   type for this request is "message/token-request".  The Client
-   includes the "Sec-Token-Origin-Alias" header, whose value is Client's
-   Origin Alias; the "Sec-Token-Client" header, whose value is Client
-   Key; and the "Sec-Token-Request-Blind" header, whose value is
+   type for this request is "application/private-token-request".  The
+   Client includes the "Sec-Token-Origin-Alias" header, whose value is
+   Client's Origin Alias; the "Sec-Token-Client" header, whose value is
+   Client Key; and the "Sec-Token-Request-Blind" header, whose value is
    request_blind.  The Client sends this request to the Attester's proxy
    URI.  An example request is shown below, where the Issuer Name is
    "issuer.net" and the Attester URI template is "https://attester.net/
@@ -952,9 +954,9 @@ Table of Contents
    :scheme = https
    :authority = attester.net
    :path = /token-request?issuer=issuer.net
-   accept = message/token-response
+   accept = application/private-token-response
    cache-control = no-cache, no-store
-   content-type = message/token-request
+   content-type = application/private-token-request
    content-length = <Length of TokenRequest>
    sec-token-origin-alias = Client's Origin Alias
    sec-token-client = Client Key
@@ -1031,9 +1033,9 @@ Table of Contents
    :scheme = https
    :authority = issuer.net
    :path = /token-request
-   accept = message/token-response
+   accept = application/private-token-response
    cache-control = no-cache, no-store
-   content-type = message/token-request
+   content-type = application/private-token-request
    content-length = <Length of TokenRequest>
 
    <Bytes containing the TokenRequest>
@@ -1094,16 +1096,16 @@ Table of Contents
    encrypted_token_response.
 
    The Issuer generates an HTTP response with status code 200 whose body
-   consists of blind_sig, with the content type set as "message/token-
-   response", the index_key set in the "Sec-Token-Origin-Alias" header,
-   and the limit of tokens allowed for a Client for the Origin within a
-   policy window set in the "Sec-Token-Limit" header.  This limit SHOULD
-   NOT be unique to a specific Origin, such that the Attester could use
-   the value to infer which Origin the Client is accessing (see
-   Section 9).
+   consists of blind_sig, with the content type set as "application/
+   private-token-response", the index_key set in the "Sec-Token-Origin-
+   Alias" header, and the limit of tokens allowed for a Client for the
+   Origin within a policy window set in the "Sec-Token-Limit" header.
+   This limit SHOULD NOT be unique to a specific Origin, such that the
+   Attester could use the value to infer which Origin the Client is
+   accessing (see Section 9).
 
    :status = 200
-   content-type = message/token-response
+   content-type = application/private-token-response
    content-length = <Length of blind_sig>
    sec-token-origin-alias = index_key
    sec-token-limit = Token limit
@@ -2111,14 +2113,18 @@ index_key = BKS-SerializePublicKey(evaluated_key)
    [KEYBLINDING]
               Denis, F., Eaton, E., Lepoint, T., and C. A. Wood, "Key
               Blinding for Signature Schemes", Work in Progress,
-              Internet-Draft, draft-irtf-cfrg-signature-key-blinding-04,
-              23 July 2023, <https://datatracker.ietf.org/doc/html/
-              draft-irtf-cfrg-signature-key-blinding-04>.
+              Internet-Draft, draft-irtf-cfrg-signature-key-blinding-05,
+              22 January 2024, <https://datatracker.ietf.org/doc/html/
+              draft-irtf-cfrg-signature-key-blinding-05>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC5861]  Nottingham, M., "HTTP Cache-Control Extensions for Stale
+              Content", RFC 5861, DOI 10.17487/RFC5861, May 2010,
+              <https://www.rfc-editor.org/rfc/rfc5861>.
 
    [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
               Key Derivation Function (HKDF)", RFC 5869,
