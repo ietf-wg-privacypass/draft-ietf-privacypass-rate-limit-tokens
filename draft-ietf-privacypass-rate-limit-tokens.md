@@ -81,7 +81,7 @@ defines stateless anonymous tokens, which can either be publicly verifiable
 or not.
 
 This variant builds upon the publicly verifiable issuance protocol that uses
-RSA Blind Signatures {{!BLINDSIG=I-D.irtf-cfrg-rsa-blind-signatures}}, and
+RSA Blind Signatures {{!BLINDSIG=RFC9474}}, and
 allows tokens to be rate-limited on a per-origin basis. This means that
 a client will only be able to receive a limited number of tokens associated
 with a given origin server within a fixed period of time.
@@ -1382,7 +1382,7 @@ The Client Secret MUST NOT be used for any purpose outside of this protocol.
 
 The protocol in this document uses {{HPKE}} directly to encrypt token request information
 to the issuer while also authenticating information exposed to the attester. Oblivious HTTP
-{{?OHTTP=I-D.ietf-ohai-oblivious-http}}, which is a protocol built on top of HPKE for
+{{?OHTTP=RFC9458}}, which is a protocol built on top of HPKE for
 request encapsulation, is not suitable for this purpose since it does not allow clients to
 additionally authenticate application-layer information that is visible to intermediaries,
 which is the case for the data visible to the Attester.
