@@ -4,15 +4,15 @@
 
 Network Working Group                                     S. Hendrickson
 Internet-Draft                                                Google LLC
-Intended status: Informational                                J. Iyengar
-Expires: 5 September 2024                                         Fastly
+Intended status: Experimental                                 J. Iyengar
+Expires: 3 October 2024                                           Fastly
                                                                 T. Pauly
                                                               Apple Inc.
                                                                S. Valdez
                                                               Google LLC
                                                               C. A. Wood
                                                               Cloudflare
-                                                            4 March 2024
+                                                            1 April 2024
 
 
                   Rate-Limited Token Issuance Protocol
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2024.
+   This Internet-Draft will expire on 3 October 2024.
 
 Copyright Notice
 
