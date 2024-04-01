@@ -2,7 +2,7 @@
 title: "Rate-Limited Token Issuance Protocol"
 abbrev: Rate-Limited Tokens
 docname: draft-ietf-privacypass-rate-limit-tokens-latest
-category: info
+category: exp
 
 ipr: trust200902
 keyword: Internet-Draft
